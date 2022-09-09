@@ -1,18 +1,21 @@
 import React from 'react'
-import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { ImageBackground, StyleSheet,SafeAreaView, KeyboardAvoidingView, Platform, View } from 'react-native'
 import { theme } from '../core/theme'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Background({ children }) {
   return (
-    <ImageBackground
-      
-      resizeMode="cover"
+    <SafeAreaView
       style={styles.background}
     >
-      <KeyboardAvoidingView style={styles.container} >
+      <KeyboardAwareScrollView 
+        contentContainerStyle={{flexGrow: 1, paddingHorizontal: 20,paddingVertical: 25,}}
+        showsHorizontalScrollIndicator={false} >
+        <View style={styles.container}>
         {children}
-      </KeyboardAvoidingView>
-    </ImageBackground>
+        </View>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   )
 }
 

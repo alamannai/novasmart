@@ -4,27 +4,14 @@ import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import Nav  from '../navigation/Nav';
+import { StatusBar } from 'expo-status-bar';
+import { useSelector } from "react-redux";
+
 
 const userData= {
-    last: '31/08/2022',
-    nbeVacc: '3'
-}
-
-const Drawer = createDrawerNavigator();
-
-
-function Root() {
-
-  return (
-
-    <Drawer.Navigator initialRouteName="Home">
-
-      <Drawer.Screen name="booking" component={BookingNavigation} />
-
-    </Drawer.Navigator>
-
-  );
-
+  last: '31/08/2022',
+  nbeVacc: '3'
 }
 
 
@@ -33,13 +20,26 @@ export default function HomeScreen() {
     const [bookVacc, setBookVacc] = useState(false);
 
 
+
   return (
-    <SafeAreaView style={
-        bookVacc?{ backgroundColor:'#696969', flex:1, opacity:0.8, zIndex:-1} 
-        : 
-        { backgroundColor:'#FAFAFA',flex:1}}
-        >
+
+    <SafeAreaView style={{ flex: 1}}>
+    <View
+      style={{
+        backgroundColor: '#FAFAFA',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height:50,
+
+      }}>
+      <StatusBar style="dark"  />
+    </View>
+
+    
+    <Nav title={ 'home' } status={true} />  
+   
         <View style={{ height:80, paddingVertical: 10, position:'relative'}} >
+
             <Text style={styles.headerText}>Calendar :</Text>
                 {bookVacc? 
                 <View></View> 
@@ -135,7 +135,8 @@ export default function HomeScreen() {
             >
                 <Text style={{fontSize: 12,}}>Check vacation's History</Text> 
             </TouchableOpacity>    
-        </View>         
+        </View>   
+   
     </SafeAreaView>
   );
 }

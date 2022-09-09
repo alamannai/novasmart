@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet , TouchableOpacity} from 'react-native'
-import { theme } from '../core/theme'
+
 import { Icon } from '@rneui/themed';
 
 export default function Button() {

@@ -13,7 +13,7 @@ export default function Nav({title}) {
                     <Icon name="menu-outline" size={22} type='ionicon' ></Icon>
                 </TouchableOpacity>
             </View>
-            
+  
             <View style={styles.viewElt}>
                 <Text style={styles.textHeader} >{title}</Text>
             </View>
@@ -23,6 +23,7 @@ export default function Nav({title}) {
                     <Icon name="notifications-outline" size={22} type='ionicon' ></Icon>
                 </TouchableOpacity>
             </View>
+            
         </SafeAreaView>    
  
     

@@ -164,7 +164,7 @@ const handleSubmit = () => {
                     <Text style={{marginRight:10}}>Start Mission :</Text>
 
                     <View style={{flexDirection:'row',width:'100%' , marginTop:6}}>
-                    <TouchableOpacity style={{
+                    <TouchableOpacity onPress={displayDatepicker}  style={{
                         width:30,
                         height:30,
                         padding:2, 
@@ -173,9 +173,9 @@ const handleSubmit = () => {
                         alignItems: "center",
                         marginHorizontal:8,
                         justifyContent:'center',}}>
-                            <Icon name="calendar" size={18} type='ionicon' color={'#fff'}  ></Icon>
+                            <Icon name="calendar" size={18} type='ionicons' color={'#fff'}  ></Icon>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{
+                    <TouchableOpacity onPress={displayTimepicker} style={{
                         width:30,
                         height:30,
                         padding:2, 
@@ -183,7 +183,7 @@ const handleSubmit = () => {
                         backgroundColor:'#00008B',
                         alignItems: "center",
                         justifyContent:'center',}}>
-                            <Icon name="time" size={18} type='ionicon' color={'#fff'} ></Icon>
+                            <Icon name="time" size={18} type='ionicons' color={'#fff'} ></Icon>
                     </TouchableOpacity>
                     </View>
                 </View>
@@ -201,7 +201,7 @@ const handleSubmit = () => {
                         alignItems: "center",
                         marginHorizontal:8,
                         justifyContent:'center',}}>
-                            <Icon name="calendar" size={18} type='ionicon' color={'#fff'}  ></Icon>
+                            <Icon name="calendar" size={18} type='ionicons' color={'#fff'}  ></Icon>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={displayTimepicker} style={{
                         width:30,
@@ -211,7 +211,7 @@ const handleSubmit = () => {
                         backgroundColor:'#00008B',
                         alignItems: "center",
                         justifyContent:'center',}}>
-                            <Icon name="time" size={18} type='ionicon' color={'#fff'}  ></Icon>
+                            <Icon name="time" size={18} type='ionicons' color={'#fff'}  ></Icon>
                     </TouchableOpacity>
                     </View>
                 </View>
@@ -254,7 +254,7 @@ const handleSubmit = () => {
 
 
             <View style={{flexDirection:'row',margin:4, padding:8,backgroundColor:'#fff',marginBottom:8, alignItems:'center',justifyContent:'flex-end'}}>
-            <TouchableOpacity  style={{
+            <TouchableOpacity onPress={handleSubmit}  style={{
                         width:70,
                         height:30,
                         padding:2, 
