@@ -7,6 +7,7 @@ import {  getMenu } from '../features/menuSlice';
 
 import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
+import { string } from 'yup';
 
 
 
@@ -22,30 +23,83 @@ export default function HomeScreen() {
     const user = useSelector((state) => state.auth.userInfo);
     const menu = useSelector((state) => state.menu.menu);
 
-    
-/*
-    useEffect(() => {
-        console.log('--------- getting menu --------')
-        dispatch(getMenu(user.LAN,user.ZHRU_USR ,user.ZHRU_COD, user.SCIV_PAS))
-            .then((response) => {
-                console.log('menu',response)
 
-              
-            })
-            .catch((error) => {
-              // ToastAndroid.show(error, ToastAndroid.showWithGravity);
-            });
-        
-         
-      },[])
-    */
+
+
+    const [isPickerShow, setIsPickerShow] = useState(false);
+    const [date, setDate] = useState(new Date(Date.now()));
+  
+    const showPicker = () => {
+      setIsPickerShow(true);
+    };
+  
+    const onChange = (event, value) => {
+      setDate(value);
+      const time = date.toString().slice(16,25)
+      console.log('picked time : ',time)
+      if (Platform.OS === 'android') {
+        setIsPickerShow(false);
+      }
+    };
+  
+
+    
 
   return (
         <WrapElt>
+            <View style={{height:'15%',width:'100%',backgroundColor:'#fafafa'}}>
+            <Text >Hello ,{user.SCIV_PRE}</Text>
+            </View>
+        <View style={{height:'15%',alignItems:'center',justifyContent:'center'}}>
+            <TouchableOpacity  onPress={showPicker}   style={{
+                width:30,
+                height:30,
+                padding:2, 
+                borderRadius:8, 
+                backgroundColor:'#00008B',
+                alignItems: "center",
+                marginHorizontal:12,
+                justifyContent:'center',}}>
 
-    <Text>Hello ,{user.SCIV_PRE}</Text>
-    <Text>menus ,{menu.length}</Text>
-   { /*<FlatList data={items} renderItem={({item}) =>   <CarItemCard model={item.model} reference={item.reference} />} />*/}
+                <Icon name="calendar" size={18} type='ionicon' color={'#fff'}  />
+
+            </TouchableOpacity>
+
+
+
+        </View>
+
+        {/* The date picker */}
+      {isPickerShow && (
+        <DateTimePicker
+          value={date}
+          mode={'time'}
+          dateFormat={"shortdate"}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          is24Hour={true}
+          onChange={onChange}
+          style={styles.datePicker}
+        />
+      )}
+            
+
+        <FlatList  style={{backgroundColor:'#fafafa',width:'100%',alignContent: "space-between"}} 
+        data={menu} 
+        renderItem={({item}) =>  
+        <TouchableOpacity style={[styles.elevation,{
+            backgroundColor:"skyblue",
+            margin:16,
+            width:'40%',
+            height:120,
+            padding:6,
+            alignItems:'center',
+            justifyContent:'center',
+            borderRadius:6
+            }]}>
+            <Text style={{margin:2,color:'#fff', fontSize:12}}>{item.ZMOD_DES}</Text>
+        </TouchableOpacity>
+    } 
+        />
     
 
     
@@ -187,11 +241,15 @@ const styles = StyleSheet.create({
         right:18,
         position:"absolute",
         top:16
+    }   ,  elevation: {
+        elevation: 8,
+        shadowColor: '#999999',
+        shadowOpacity:0.2,
+        shadowOffset: { width: 0, height: 0 },
+
+
     },
-    elevation: {
-      elevation: 6,
-      shadowColor: '#52006A',
-    },
+    
       hideModal:{
         width:30,
         height:30,
@@ -202,5 +260,10 @@ const styles = StyleSheet.create({
         right:-2,
         position:"absolute",
         top:-2
-      }
+      },
+
+  pickedDateContainer: {
+    padding: 20,
+    backgroundColor: '#eee',
+    borderRadius: 10,}
 })
