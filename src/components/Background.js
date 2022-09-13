@@ -9,7 +9,7 @@ export default function Background({ children }) {
       style={styles.background}
     >
       <KeyboardAwareScrollView 
-        contentContainerStyle={{flexGrow: 1, paddingHorizontal: 20,paddingVertical: 25,}}
+        contentContainerStyle={{flexGrow: 1,paddingVertical: 25,}}
         showsHorizontalScrollIndicator={false} >
         <View style={styles.container}>
         {children}

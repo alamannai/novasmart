@@ -78,13 +78,23 @@ export default function LoginScreen({ navigation }) {
         handleLogin();
       },
     });
+    const err = useSelector((state) => state.auth.error);
+
+    const [alert, setAlert] = useState('');
+
   
     const handleLogin = () => {
       console.log("Login")
       dispatch(login(formik.values))
         .unwrap()
         .then((response) => {
+          if(response.data.connecte){
             navigation.navigate("home");
+          }
+          if(response.data.Status){
+            setAlert("Invalid user or password !")
+          }
+            
         })
         .catch((error) => {
           // ToastAndroid.show(error, ToastAndroid.showWithGravity);
@@ -95,7 +105,16 @@ export default function LoginScreen({ navigation }) {
     return(
         <Background>
 
+          <View style={{backgroundColor:'red'}}>
+            <Text>{alert}</Text>
+            
+      
+           
 
+            
+   
+            
+          </View>
           <View style={{width:'100%',marginTop:8, alignItems:'flex-end'}}>
           <BtnIcon />
           </View>

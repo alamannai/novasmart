@@ -14,7 +14,7 @@ export default function ScreenNavigator() {
       initialRouteName="login"
       screenOptions={{ headerShown: false}}
     >
-      <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen name="login" component={LoginScreen}  />
       <Stack.Screen name="home" component={HomeScreen} />
       {/*<Stack.Screen name="car" component={CarScreen} />*/}
     </Stack.Navigator>

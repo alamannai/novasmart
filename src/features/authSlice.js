@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import  AsyncStorage  from 'react-native';
 import AuthService from "../services/auth.service";
-import React, { useEffect } from "react";
 import * as SecureStore from 'expo-secure-store';
 
 async function getItem(key) {
@@ -16,11 +14,16 @@ const accessToken = getItem("accessToken");
 export const login = createAsyncThunk(
   "auth/login",
   async ({ username, password }, thunkAPI) => {
-    console.log("username, password", username, password);
     try {
-      console.log("success")
-      return await AuthService.login(username, password);
-
+      const data = await AuthService.login(username, password);
+      if(data.connecte){
+        const { connecte, token } = data;
+        return { connecte, token };
+      }else{
+        const err  = data.Status;
+        console.log('slice',err)
+        return err
+      }
     } catch (error) {
       const message =
         (error.response &&
@@ -46,7 +49,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 
 const initialState =  {
       isLoggedIn: false,
-      userInfo:  [],
+      userInfo:  null,
       error: false,
       accessToken:  '',
       loading: false,
@@ -58,9 +61,9 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.loading = false
+      state.isLoggedIn = false
       state.error = false
-      state.userInfo = []
+      state.userInfo = null
       state.accessToken = ''
       state.loading= false
       state.success= false
@@ -74,20 +77,23 @@ const authSlice = createSlice({
 
     .addCase(login.fulfilled, (state, action) => {
         state.loading = false
-        state.error = true
-
-        state.userInfo = action.payload.connecte
-        state.accessToken = action.payload.tokens;
+        if(action.payload.connecte){
+          state.isLoggedIn = true
+          state.userInfo = action.payload.connecte
+          state.accessToken = action.payload.token;
+        }
+        
       })
 
     .addCase(login.rejected, (state, action) => {
         state.loading = false
-        //state.error = true
+        state.error = true
       })
 
       .addCase(logout.fulfilled, (state) => {
         state.userInfo = []
         state.accessToken = ''
+        state.isLoggedIn = false
       })
 
   }

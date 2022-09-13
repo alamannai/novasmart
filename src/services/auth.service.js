@@ -14,21 +14,22 @@ async function dlt (key) {
 }
 
 
-
-
  const login =  async(username, password) => {
   return await axios
     .post(REACT_APP_API_URL+'/login', {
-      'ZHRU_COD':username,
-      'ZHRU_PWD':password
+      "ZHRU_COD":username,
+      "ZHRU_PWD":password
     })
     .then((response) => {
-      if (response.data) {
-        save("user", JSON.stringify([response.data.connecte]));
-        save("accessToken", JSON.stringify(response.data.token));
-      }
-      return response.data;
-    });
+        if(response.data.connecte){
+          save("user", JSON.stringify(response.data.connecte));
+          save("accessToken", JSON.stringify(response.data.token));
+          return response.data;
+        }else{
+          console.log('invalide ,from service',response.data)
+          return response.data;
+        }
+    })
 };
 
 
