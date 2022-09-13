@@ -5,8 +5,11 @@ const REACT_APP_API_URL = 'http://10.12.12.72:3003/api/ngsmart'
 
 
 
-async function save(key, value) {
-   await SecureStore.setItemAsync(key, value);
+ function save(key, value) {
+  const val =  SecureStore.setItemAsync(key, value);
+  if (val){
+    return val
+  }
 }
 
 async function dlt (key) {
@@ -21,9 +24,11 @@ async function dlt (key) {
       "ZHRU_PWD":password
     })
     .then((response) => {
+        console.log('saving token',response.data.token)
         if(response.data.connecte){
-          save("user", JSON.stringify(response.data.connecte));
-          save("accessToken", JSON.stringify(response.data.token));
+          localStorage.setItem("user", JSON.stringify(response.data.connecte));
+          localStorage.setItem("accessToken",JSON.stringify(response.data.token)
+          );
           return response.data;
         }else{
           console.log('invalide ,from service',response.data)

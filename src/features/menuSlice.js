@@ -1,9 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import MenuService from '../services/menu.service'
 import * as SecureStore from 'expo-secure-store';
-import { useEffect } from 'react';
+
+
 async function getItem(key) {
-  return await SecureStore.getItemAsync(key);
+  const val = await SecureStore.getItemAsync(key);
+  if (val){
+    return val
+  }
 }
 
 const user = getItem("user");
@@ -13,10 +17,12 @@ const accessToken = getItem("accessToken");
 // Get user menu
 export const getMenu = createAsyncThunk(
     'menu/getAll',
-    async (lan, profil, username, pas, thunkAPI) => {
+    async (_, thunkAPI) => {
       try {
-        const token = getItem("accessToken");
-        const data = await MenuService.getMenu(lan, profil, username, pas, token)
+        const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+        const user = JSON.parse(localStorage.getItem("user"));
+        console.log(user)
+        const data = await MenuService.getMenu(user.LAN, user.ZHRU_USR, user.ZHRU_COD, user.SCIV_PAS, accessToken)
         return data
       } catch (error) {
         const message =
@@ -57,13 +63,12 @@ export const menuSlice = createSlice({
         .addCase(getMenu.fulfilled, (state, action) => {
           state.isLoading = false
           state.isSuccess = true
-          console.log('this is payload',action.payload)
+          console.log("payload", action.payload)
           state.menu = action.payload
         })
         .addCase(getMenu.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
-          state.message = action.payload
         })
     },
   })

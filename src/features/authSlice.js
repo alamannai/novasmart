@@ -11,6 +11,7 @@ const accessToken = getItem("accessToken");
 
 
 
+
 export const login = createAsyncThunk(
   "auth/login",
   async ({ username, password }, thunkAPI) => {
@@ -49,7 +50,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
 
 const initialState =  {
       isLoggedIn: false,
-      userInfo:  null,
+      userInfo:  [],
       error: false,
       accessToken:  '',
       loading: false,

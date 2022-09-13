@@ -15,7 +15,6 @@ const userData= {
   nbeVacc: '3'
 }
 
-
 export default function HomeScreen() {
 
     const dispatch = useDispatch()
@@ -23,9 +22,11 @@ export default function HomeScreen() {
     const user = useSelector((state) => state.auth.userInfo);
     const menu = useSelector((state) => state.menu.menu);
 
+    
+/*
     useEffect(() => {
-        console.log('getting menu',user["ZHRU_USR"])
-        dispatch(getMenu("F","LLLISTE" ,"HR_ADM", 10))
+        console.log('--------- getting menu --------')
+        dispatch(getMenu(user.LAN,user.ZHRU_USR ,user.ZHRU_COD, user.SCIV_PAS))
             .then((response) => {
                 console.log('menu',response)
 
@@ -37,12 +38,13 @@ export default function HomeScreen() {
         
          
       },[])
-    
+    */
 
   return (
         <WrapElt>
 
-    <Text>text from home</Text>
+    <Text>Hello ,{user.SCIV_PRE}</Text>
+    <Text>menus ,{menu.length}</Text>
    { /*<FlatList data={items} renderItem={({item}) =>   <CarItemCard model={item.model} reference={item.reference} />} />*/}
     
 

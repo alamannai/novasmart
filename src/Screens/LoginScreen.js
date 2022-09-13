@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
-
+import {  getMenu } from '../features/menuSlice';
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
 import Header from '../components/Header'
@@ -82,17 +82,22 @@ export default function LoginScreen({ navigation }) {
 
     const [alert, setAlert] = useState('');
 
-  
+
     const handleLogin = () => {
-      console.log("Login")
+      console.log("---------------Login ------------------")
+      console.log(formik.values)
       dispatch(login(formik.values))
-        .unwrap()
         .then((response) => {
-          if(response.data.connecte){
+          if(response.payload.connecte){
+            console.log('---------success login----------')
+            dispatch( getMenu())
+              .then((res) => { 
+                console.log('menu res',res)
+              })
             navigation.navigate("home");
-          }
-          if(response.data.Status){
-            setAlert("Invalid user or password !")
+          }else{
+            console.log('status :',response.payload)
+            setAlert("Invalid username or password !")
           }
             
         })
@@ -102,19 +107,19 @@ export default function LoginScreen({ navigation }) {
     };
 
 
+
     return(
         <Background>
-
-          <View style={{backgroundColor:'red'}}>
-            <Text>{alert}</Text>
-            
-      
-           
-
-            
-   
-            
-          </View>
+          {alert.length == 0?<View></View> :
+          
+          <View style={{backgroundColor:'#DC143C',padding:4, borderRadius:8,width:'100%',alignItems:'center'}}>
+          <Text style={{color:'#fff',margin:4}}>{alert}</Text>
+          
+        </View>
+          
+          
+          }
+         
           <View style={{width:'100%',marginTop:8, alignItems:'flex-end'}}>
           <BtnIcon />
           </View>
