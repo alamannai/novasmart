@@ -212,13 +212,12 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
   button:{
-    borderWidth:1,
     width:'40%',
     alignItems:'center',
     justifyContent:'center',
     height:50,
-    borderColor:'purple',
+
     borderRadius:12,
-    backgroundColor:'purple'
+    backgroundColor:'#c5d4e8'
   }
 })

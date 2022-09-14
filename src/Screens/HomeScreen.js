@@ -1,4 +1,4 @@
-import { StyleSheet, Modal, Pressable, Text, View, FlatList, TouchableOpacity , Button } from 'react-native';
+import { StyleSheet, Modal, Pressable, Text, View, FlatList, TouchableOpacity , Image} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,14 +9,8 @@ import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
 import { string } from 'yup';
 
-
-
-const userData= {
-  last: '31/08/2022',
-  nbeVacc: '3'
-}
-
-export default function HomeScreen() {
+import { getFer } from '../features/calendarSlice';
+export default function HomeScreen({navigation}) {
 
     const dispatch = useDispatch()
 
@@ -41,17 +35,57 @@ export default function HomeScreen() {
         setIsPickerShow(false);
       }
     };
-  
+  const today = new Date().toISOString().slice(0,10)
 
-    
+console.log(today.toString().replace('-','').replace('-','').slice(4,6))
+    const handleNavigate = (name) => {
+
+        navigation.navigate(name)
+      };
+
+      useEffect(() => {
+        dispatch(getFer(today.toString().replace('-','').replace('-','').slice(4,6)))
+          .unwrap()
+          .then((response) => {
+            console.log('--------------getting jfer-----------',response)
+          })
+          .catch((error) => {
+            // ToastAndroid.show(error, ToastAndroid.showWithGravity);
+          });
+      }, [])
+   
 
   return (
         <WrapElt>
-            <View style={{height:'15%',width:'100%',backgroundColor:'#fafafa'}}>
-            <Text >Hello ,{user.SCIV_PRE}</Text>
+            <View style={{height:'25%',width:'100%',backgroundColor:'#fafafa',justifyContent:'center',position:'relative'}}>
+            <Text style={{marginLeft:20,fontSize:16,fontWeight:'500',color:'#191970'}} >
+                {user.LAN == 'F'?'Bonjour, ':'Hello, '}
+                </Text>
+            <Text style={{padding:6,marginLeft:'10%',fontSize:28,fontWeight:'700',color:'#000080'}}>{user.SCIV_PRE}</Text>
+            <View style={{
+                backgroundColor:'#008081',
+                alignItems:'center',
+                justifyContent:'center',
+                width:'60%',
+                borderRadius:6,
+                position:'absolute',
+                bottom:30,
+                right:10
+                }}>
+            <Text style={{
+                padding:6,
+                fontSize:16,
+                fontWeight:'400',
+                color:'#fafafa'
+                }}>
+                    {user.LAN == 'F'?`${'Aujourd'}'hui :`:'Today :'} { today}
+                </Text>
             </View>
+            
+            </View>
+            {/** 
         <View style={{height:'15%',alignItems:'center',justifyContent:'center'}}>
-            <TouchableOpacity  onPress={showPicker}   style={{
+            <View  onPress={showPicker}   style={{
                 width:30,
                 height:30,
                 padding:2, 
@@ -63,13 +97,13 @@ export default function HomeScreen() {
 
                 <Icon name="calendar" size={18} type='ionicon' color={'#fff'}  />
 
-            </TouchableOpacity>
+            </View>
 
 
 
         </View>
 
-        {/* The date picker */}
+         The date picker 
       {isPickerShow && (
         <DateTimePicker
           value={date}
@@ -81,23 +115,52 @@ export default function HomeScreen() {
           style={styles.datePicker}
         />
       )}
-            
+            */}
 
-        <FlatList  style={{backgroundColor:'#fafafa',width:'100%',alignContent: "space-between"}} 
+        <FlatList  style={{backgroundColor:'#fafafa',width:'100%'}} 
         data={menu} 
         renderItem={({item}) =>  
-        <TouchableOpacity style={[styles.elevation,{
-            backgroundColor:"skyblue",
+        <View style={[styles.elevation,{
+            position:'relative',
+            alignSelf:'center',
             margin:16,
-            width:'40%',
             height:120,
-            padding:6,
+            flex:1,
             alignItems:'center',
             justifyContent:'center',
-            borderRadius:6
+            flexDirection:'row',
+            borderRadius:20,
+            backgroundColor:'#fafafa'
             }]}>
-            <Text style={{margin:2,color:'#fff', fontSize:12}}>{item.ZMOD_DES}</Text>
-        </TouchableOpacity>
+                <Image source={require('../../assets/cart-bg.jpg')} style={{
+                    width:'100%',
+                    flex:1,
+                    height:120,
+                    borderRadius:8,
+                    position:'absolute',
+                    top:0,
+
+                    alignSelf:'center',backgroundColor:'#fafafa'
+                    }} 
+                    />
+                    <View style={{flex:1,padding:8}}>
+                        <Text style={{margin:2,color:'#fff',marginLeft:16, fontSize:16,fontWeight:'bold'}}>
+                            {item.ZMOD_DES}
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPressOut={() =>handleNavigate(item.ZMOD_ID)}   style={[styles.elevation,{
+                        backgroundColor:'#c5d4e8',
+                        height:42,
+                        width:42,           
+                        alignItems:'center',
+                        justifyContent:'center',
+                        marginRight:20,
+                        borderRadius:8
+                        }]}>
+                        <Icon name="chevron-right" size={22} color={'#fff'} type='entypo'></Icon>
+                    </TouchableOpacity>
+         
+        </View>
     } 
         />
     
@@ -228,7 +291,7 @@ const styles = StyleSheet.create({
         padding:4, 
         borderWidth:0.8,
         margin:4 , 
-        borderColor:'#d3d3d3'
+        borderColor:'#00f'
     },
     addBtn:{
         width:30,
@@ -241,11 +304,13 @@ const styles = StyleSheet.create({
         right:18,
         position:"absolute",
         top:16
-    }   ,  elevation: {
-        elevation: 8,
+    }   ,  
+    elevation: {
+        elevation: 2,
         shadowColor: '#999999',
         shadowOpacity:0.2,
         shadowOffset: { width: 0, height: 0 },
+
 
 
     },

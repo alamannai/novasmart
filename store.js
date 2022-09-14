@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './src/features/authSlice'
 import menuReducer from './src/features/menuSlice'
+import calendarReducer from './src/features/calendarSlice'
 
 
 
@@ -8,6 +9,7 @@ import menuReducer from './src/features/menuSlice'
 export const store = configureStore({
     reducer: {
       auth: authReducer,
-      menu: menuReducer
+      menu: menuReducer,
+      calendar: calendarReducer
     },
 })

@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { login, logout } from "../features/userSlice";
 
 import HomeScreen from  "../Screens/HomeScreen";
-
+import PlanningScreen from  "../Screens/PlanningScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -38,6 +38,7 @@ export default function MainNavigation () {
             component={HomeScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="CPH_SAPT" component={PlanningScreen}     options={{ headerShown: false }}  />
         </Stack.Navigator>
       ) : (
         <AuthNavigator />
