@@ -9,6 +9,7 @@ import { login, logout } from "../features/userSlice";
 
 import HomeScreen from  "../Screens/HomeScreen";
 import PlanningScreen from  "../Screens/PlanningScreen";
+import AskVacc from  "../Screens/AskVacc";
 
 const Drawer = createDrawerNavigator();
 
@@ -39,6 +40,7 @@ export default function MainNavigation () {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="CPH_SAPT" component={PlanningScreen}     options={{ headerShown: false }}  />
+          <Stack.Screen name="SPH_SABD" component={AskVacc}     options={{ headerShown: false }}  />
         </Stack.Navigator>
       ) : (
         <AuthNavigator />

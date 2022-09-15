@@ -20,7 +20,28 @@ const getFerie = async (lan,mat, startDate,endDate, username,pas,prg, token) => 
          "PRG":prg
         }, config )
       .then((response) => {
-        console.log('service calendar', response)
+        return response.data;
+  });
+
+  }
+
+
+  const getAbs = async (lan,mat, startDate,endDate,pas, token) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    return await axios.post(REACT_APP_API_URL+ '/GetAbsenceEmp', 
+    data= {
+        "SABD_LAN":lan,
+        "SABD_MAT":mat,
+         "DATE_DEB":startDate,
+         "DATE_FIN":endDate,
+         "SABD_PAS":pas,
+        }, config )
+      .then((response) => {
+        console.log('service abs', response)
         return response.data;
   });
 
@@ -29,7 +50,8 @@ const getFerie = async (lan,mat, startDate,endDate, username,pas,prg, token) => 
   
 
 const calendarService = {
-    getFerie
+    getFerie,
+    getAbs
 };
 
 export default calendarService;

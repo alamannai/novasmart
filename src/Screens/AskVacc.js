@@ -1,4 +1,4 @@
-import { StyleSheet, Modal, Pressable, Text, View, ActivityIndicator, TouchableOpacity , Image} from 'react-native';
+import { StyleSheet, Modal, Pressable, Text, View, FlatList, TouchableOpacity , Image} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -8,11 +8,11 @@ import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
 import { string } from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { getFer } from '../features/calendarSlice';
 
 import FormAdd from '../components/FormAdd';
 
-export default function PlanningScreen({navigation}) {
+export default function AskVacc({navigation}) {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => state.auth.userInfo);
@@ -26,58 +26,9 @@ export default function PlanningScreen({navigation}) {
 
       const [daysFree, setDaysFree] = useState([])
       
-  
-  const isLoading = useSelector((state) => state.calendar.isLoading);
-
   const jfer = useSelector((state) => state.calendar.Jfer);
-  const abs = useSelector((state) => state.calendar.Abs);
-  useEffect(() => {
-    for (let i = 0; i < jfer.length; i++) {
-        const element = jfer[i];
-        const date =  new Date(
-            element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
-            element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
-            element.XSJFEEMP_DATF.toString().slice(6,8)
-            
-        )
-        setDaysFree(daysFree => [...daysFree, {
-            date: date, 
-            style:{backgroundColor: element.XSJFEEMP_COU},
-            textStyle: {color: '#fff'},
-        }]
-            )
-    }                     
-  }, [])
-  
-  useEffect(() => {
-    for (let i = 0; i < abs.length; i++) {
-        const element = abs[i];
-        const date =  new Date(
-            element.SABDN_DATV.toString().slice(0,4)+ '-'+
-            element.SABDN_DATV.toString().slice(4,6)+ '-'+
-            element.SABDN_DATV.toString().slice(6,8)
-            
-        )
-        setDaysFree(daysFree => [...daysFree, {
-            date: date, 
-            style:{backgroundColor: element.SGAB_COU},
-            textStyle: {color: '#fff'},
-        }]
-            )
-    }                     
-  }, [])
-    
+
   return (
-    isLoading? 
-    <View style={{flex: 1,
-        justifyContent: "center",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        padding: 10
-        }}>
-        <ActivityIndicator size="large" color="#8cd3ff"/>
-    </View> :
-    
         <WrapElt color={'#8cd3ff'}>
             <View style={{flex:1,backgroundColor:'#8cd3ff',width:'100%'}}>
   
@@ -103,46 +54,8 @@ export default function PlanningScreen({navigation}) {
             </View>
 <View >
 
-            <View style={{backgroundColor:'#8cd3ff',padding:8,height:'42%'}}>
-            <CalendarPicker  
-                todayBackgroundColor='#fafafa'
-                previousTitle={user.LAN== 'F' ?'Avant' : 'Previous'}
-                nextTitle={user.LAN== 'F' ?'Aprés' : 'Next'}
-                months={user.LAN== 'F' ? 
-                [
-                    'Janvier',
-                    'Février',
-                    'Mars',
-                    'Avril',
-                    'Mai',
-                    'Juin',
-                    'Juillet',
-                    'Août',
-                    'Septembre',
-                    'Octobre',
-                    'Novembre',
-                    'Décembre'
-                  ]
-                    : 
-                    ['January','February','March','April','May','June','July','August','September','October','November','December']
-                }
-                weekdays={user.LAN== 'F' ? 
-                    ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
-                    :
-                    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-                }
-                textStyle={{
-                    color: '#fff',
-                  }}
-                todayTextStyle={{
-                    fontWeight:'bold',
-                    color:'#1c1c1c',
-                  }}
+            <View style={{backgroundColor:'#8cd3ff',padding:8}}>
 
-                  customDatesStyles={daysFree}
-                  enableDateChange={false}
-
-                />
                 
           
             {/*<TouchableOpacity style={[styles.addBtn,styles.elevation]} >
@@ -178,7 +91,7 @@ export default function PlanningScreen({navigation}) {
                   
             <View style={{padding:20,flex:1}}>
             <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#191970',marginTop:8}} >
-                    {user.LAN == 'F'?`${'Aujourd'}'hui `:'Today '}
+                    {user.LAN == 'F'?'Demande un congé':'Ask for leave '}
                 </Text>
                 <View style={{height:'50%',marginTop:20}}>
                     <Text> add some content </Text>
@@ -192,7 +105,7 @@ export default function PlanningScreen({navigation}) {
 
                         <TouchableOpacity  style={{
                             backgroundColor:'#d67229',
-                            width:60,
+                            width:120,
                             height:60,
                             padding:4, 
                             borderRadius:10, 
@@ -203,7 +116,7 @@ export default function PlanningScreen({navigation}) {
                             bottom:30
                             
                         }} >
-                                <Icon name="add" size={22} color='#fff' type='ionicons' ></Icon>
+                                <Text style={{color:'#fff',fontWeight:'bold',fontSize:16}}>{user.LAN == 'F'?'Enregistrer':'Save '}</Text>
                             </TouchableOpacity>
                  
             </View>
@@ -215,7 +128,6 @@ export default function PlanningScreen({navigation}) {
         </View>
    
     </WrapElt>
-
   );
 }
 

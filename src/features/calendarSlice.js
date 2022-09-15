@@ -9,10 +9,10 @@ import CalendarService from '../services/calendar.servive'
 // Get user ferie
 export const getFer = createAsyncThunk(
     'menu/ferie',
-    async (month , thunkAPI) => {
+    async ( year,thunkAPI) => {
       try {
-        const startDate = '2022'+ month +'01'
-        const endDate = '2022'+ month +'31'
+        const startDate = year+'0101'
+        const endDate =  year+'1231'
         const prg = 'CALENDAR'
         const accessToken = JSON.parse(localStorage.getItem("accessToken"));
         const user = JSON.parse(localStorage.getItem("user"));
@@ -42,8 +42,44 @@ export const getFer = createAsyncThunk(
 
 
 
+
+    
+// Get user abs
+export const getAbs = createAsyncThunk(
+  'menu/abs',
+  async (year, thunkAPI) => {
+    try {
+      const startDate = '20220101'
+      const endDate = '20221231'
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+      const user = JSON.parse(localStorage.getItem("user"));
+      const data = await CalendarService.getAbs(
+          user.LAN,
+          user.SCIV_MAT, 
+          startDate, 
+          endDate, 
+          user.SCIV_PAS,
+          accessToken
+      )
+
+      return data
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return error
+    }
+  }
+)
+
+
+
   const initialState = {
     Jfer: [],
+    Abs: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -68,8 +104,22 @@ export const calendarSlice = createSlice({
           state.isLoading = false
           state.isSuccess = true
           state.Jfer = action.payload
+          //state.Abs = action.payload.Abs
         })
         .addCase(getFer.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+        })
+        .addCase(getAbs.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(getAbs.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          //state.Jfer = action.payload
+          state.Abs = action.payload
+        })
+        .addCase(getAbs.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
         })

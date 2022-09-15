@@ -90,10 +90,6 @@ export default function LoginScreen({ navigation }) {
         .then((response) => {
           if(response.payload.connecte){
             console.log('---------success login----------')
-            dispatch( getMenu())
-              .then((res) => { 
-                console.log('menu res',res)
-              })
             navigation.navigate("home");
           }else{
             console.log('status :',response.payload)

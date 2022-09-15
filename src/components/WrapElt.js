@@ -4,12 +4,12 @@ import { StatusBar } from 'expo-status-bar';
 
 
 
-export default function WrapElt({ children }) {
+export default function WrapElt({ children, color }) {
   return (
     <SafeAreaView style={{ flex: 1}}>
     <View
       style={{
-        backgroundColor: '#FAFAFA',
+        backgroundColor: color,
         alignItems: 'center',
         justifyContent: 'center',
         height:40,
