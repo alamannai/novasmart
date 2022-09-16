@@ -6,7 +6,7 @@ import { Icon } from '@rneui/themed';
 export default function Button() {
   return (
     <TouchableOpacity style={styles.button}>
-        <Icon name="settings-outline" size={24} type='ionicon' color={'#fff'} ></Icon>
+        <Icon name="settings" size={26} type='ionicon' color={'#000'} ></Icon>
     </TouchableOpacity>
   )
 }
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     height:40,
     padding:4, 
     borderRadius:8, 
-    backgroundColor:'#c5d4e8',
+    backgroundColor:'#fff',
     alignItems: "center",
     justifyContent:'center',
   },

@@ -29,12 +29,12 @@ export default function AskVacc({navigation}) {
   const jfer = useSelector((state) => state.calendar.Jfer);
 
   return (
-        <WrapElt color={'#8cd3ff'}>
-            <View style={{flex:1,backgroundColor:'#8cd3ff',width:'100%'}}>
+        <WrapElt color={'#55aaff'}>
+            <View style={{flex:1,backgroundColor:'#55aaff',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
-                backgroundColor:'#8cd3ff',
+                backgroundColor:'#55aaff',
                 width:30,
                 height:30,
                 padding:4, 
@@ -54,7 +54,7 @@ export default function AskVacc({navigation}) {
             </View>
 <View >
 
-            <View style={{backgroundColor:'#8cd3ff',padding:8}}>
+            <View style={{backgroundColor:'#55aaff',padding:8}}>
 
                 
           

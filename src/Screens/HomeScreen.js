@@ -1,4 +1,4 @@
-import { StyleSheet, Modal, ActivityIndicator, Text, View, FlatList, TouchableOpacity , Image} from 'react-native';
+import { StyleSheet, Modal, ActivityIndicator, Text, View, FlatList, TouchableOpacity , Image, Pressable} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -11,6 +11,7 @@ import { string } from 'yup';
 import { getFer, getAbs } from '../features/calendarSlice';
 
 import { Avatar } from "@rneui/themed";
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -105,20 +106,26 @@ export default function HomeScreen({navigation}) {
         <ActivityIndicator size="large" color="#8cd3ff"/>
     </View> :
     
-        <WrapElt color={'#82eefd'}>
+        <WrapElt color={'#fafafa'}>
             <View style={{
-                height:'25%',
+                height:'20%',
                 width:'100%',
-                backgroundColor:'#82eefd',
+                backgroundColor:'#fafafa',
                 justifyContent:'center',
                 position:'relative',
                 }}>
-            <Text style={{marginLeft:'10%',fontSize:16,marginTop:35,fontWeight:'500',color:'#191970'}} >
-                {user.LAN == 'F'?'Bonjour, ':'Hello, '}
-                </Text>
-            <Text style={{padding:6,marginLeft:'15%',fontSize:28,fontWeight:'700',color:'#000080'}}>
-                {user.SCIV_PRE}
-            </Text>
+                    <View style={{flexDirection:'row' ,alignItems:'center',marginLeft:'5%',marginTop:'10%'}}>
+                    <Text style={{fontSize:22,fontWeight:'300',color:'#1c1c1c'}} >
+                        {user.LAN == 'F'?'Bonjour,  ':'Hello,  '}
+                        </Text>
+                    <Text style={{fontSize:22,fontWeight:'700',color:'#1c1c1c'}}>
+                        {user.SCIV_PRE}
+                    </Text>
+                    </View>
+                    <Text style={{fontSize:14,fontWeight:'400',color:'1c1c1c',opacity:0.2,marginLeft:'5%',marginTop:10}}>
+                    {user.LAN == 'F'?'Bonne Journée .':'Have a nice day .'}
+                    </Text>
+                    {/**
             <View style={{position:'absolute',right:40,bottom:30}}>
                 <Avatar
                     size={76}
@@ -130,9 +137,9 @@ export default function HomeScreen({navigation}) {
                 />
 
             </View>
-
+ */}
             <TouchableOpacity  style={{
-                        backgroundColor:'#82eefd',
+                        backgroundColor:'#fafafa',
                         height:30,
                         width:30,           
                         alignItems:'center',
@@ -141,11 +148,11 @@ export default function HomeScreen({navigation}) {
                         right:20,
                         top:20
                         }}>
-                        <Icon name="notifications" size={20} color={'#000'} type='ionicons'></Icon>
+                        <Icon name="notifications-outline" size={20} color={'#000'} type='ionicon'></Icon>
                        
                     </TouchableOpacity>
-                    <TouchableOpacity  style={{
-                        backgroundColor:'#82eefd',
+                 <TouchableOpacity  style={{
+                        backgroundColor:'#fafafa',
                         height:30,
                         width:30,           
                         alignItems:'center',
@@ -154,7 +161,7 @@ export default function HomeScreen({navigation}) {
                         left:20,
                         top:20
                         }}>
-                        <Icon name="menu" size={20} color={'#000'} type='ionicons'></Icon>
+                        <Icon name="md-menu-outline" size={20} color={'#000'} type='ionicon'></Icon>
                     </TouchableOpacity>
 
             
@@ -162,22 +169,21 @@ export default function HomeScreen({navigation}) {
 
 
 
-        <FlatList  style={{backgroundColor:'#fff',width:'100%'}} 
+
+        <FlatList  style={{backgroundColor:'#fafafa',flex:1}} horizontal={true}
         data={menu} 
         renderItem={({item}) =>  
         <View style={[styles.elevation,{
             position:'relative',
-            alignSelf:'center',
-            margin:16,
-            height:120,
+            marginTop:30,
+            margin:8,
             flex:1,
-            alignItems:'center',
-            justifyContent:'center',
-            flexDirection:'row',
-            borderRadius:20,
-            backgroundColor:'#fafafa'
+            width:200,
+            flex:1,
+            borderRadius:10,
+            backgroundColor:'#3964bc',
             }]}>
-                <Image source={require('../../assets/cart-bg.jpg')} style={{
+                {/** <Image source={require('../../assets/cart-bg.jpg')} style={{
                     width:'100%',
                     flex:1,
                     height:120,
@@ -187,23 +193,32 @@ export default function HomeScreen({navigation}) {
 
                     alignSelf:'center',backgroundColor:'#fafafa'
                     }} 
-                    />
-                    <View style={{flex:1,padding:8,flexDirection:'row',paddingLeft:20}}>
+                    />*/}
+                    <View key={item.ZMOD_ID} style={{padding:8,height:'20%'}}>
 
 
-                        <Text style={{margin:2,color:'#fff',marginLeft:16, fontSize:16,fontWeight:'bold'}}>
+                    <Text style={{margin:2,color:'#fafafa',opacity:0.5, fontSize:10,fontWeight:'bold',alignSelf:'flex-end'}}>
+                        #{item.ZMOD_PAG}
+                    </Text>
+                    </View>
+                    <View style={{padding:8,width:'80%',position:'absolute',bottom:'15%',left:'5%'}}>
+
+
+                        <Text style={{margin:2,color:'#fafafa', opacity:0.8,fontSize:14,fontWeight:'bold'}}>
                             {item.ZMOD_DES}
                         </Text>
-                    </View>
-                    <TouchableOpacity onPressOut={() =>handleNavigate(item.ZMOD_ID)}   style={[styles.elevation,{
-                        backgroundColor:'#4adede',
-                        height:42,
-                        width:42,           
+                    </View> 
+                    <TouchableOpacity onPressOut={() =>handleNavigate(item.ZMOD_ID)}   style={{
+                        backgroundColor:'#3964bc',
+                        height:30,
+                        width:30,   
+                        position:'absolute',
+                        bottom:10,
+                        right:10,        
                         alignItems:'center',
                         justifyContent:'center',
-                        marginRight:20,
                         borderRadius:8
-                        }]}>
+                        }}>
 
                         <Icon name="chevron-right" size={22} color={'#fff'} type='entypo'></Icon>
                     </TouchableOpacity>
@@ -211,6 +226,69 @@ export default function HomeScreen({navigation}) {
         </View>
     } 
         />
+        <View style={{backgroundColor:'#fafafa',flex:1,width:'100%',padding:16}}>
+            <View style={{height:'15%'}}>
+            <Text style={{fontWeight:'700'}}>Event</Text>
+            </View>
+               
+                <ScrollView>
+
+             
+                <View style={[styles.elevation,
+                    {
+                        backgroundColor:'#fff',
+                        margin:8,
+                        marginTop:16,
+                        height:70,
+                        borderRadius:12,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        position:'relative'
+                        }]}>
+                    <Text>gg</Text>
+                    <TouchableOpacity style={{
+                        backgroundColor:'#3964bc',
+                        height:80,
+                        width:50,
+                        position:'absolute',
+                        left:0,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderRadius:8
+                    }}>
+                    <Icon name="document-text-outline" size={24} color={'#fff'} type='ionicon'></Icon>
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.elevation,
+                    {
+                        backgroundColor:'#fff',
+                        margin:8,
+                        marginTop:16,
+                        height:70,
+                        borderRadius:12,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        position:'relative'
+                        }]}>
+                    <Text>gg</Text>
+                    <TouchableOpacity style={{
+                        backgroundColor:'#3964bc',
+                        height:80,
+                        width:50,
+                        position:'absolute',
+                        left:0,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderRadius:8
+                    }}>
+                    <Icon name="document-text-outline" size={24} color={'#fff'} type='ionicon'></Icon>
+                    </TouchableOpacity>
+                </View>
+               
+                <View style={{height:20}}></View>
+                </ScrollView>
+
+        </View>
     </WrapElt>
   );
 }
@@ -248,7 +326,7 @@ const styles = StyleSheet.create({
         top:16
     }   ,  
     elevation: {
-        elevation: 2,
+        elevation: 4,
         shadowColor: '#999999',
         shadowOpacity:0.2,
         shadowOffset: { width: 0, height: 0 },

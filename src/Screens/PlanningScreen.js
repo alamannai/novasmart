@@ -43,7 +43,7 @@ export default function PlanningScreen({navigation}) {
         setDaysFree(daysFree => [...daysFree, {
             date: date, 
             style:{backgroundColor: element.XSJFEEMP_COU},
-            textStyle: {color: '#fff'},
+            textStyle: {color: '#1c1c1c'},
         }]
             )
     }                     
@@ -75,15 +75,15 @@ export default function PlanningScreen({navigation}) {
         justifyContent: "space-around",
         padding: 10
         }}>
-        <ActivityIndicator size="large" color="#8cd3ff"/>
+        <ActivityIndicator size="large" color="#3e77b6"/>
     </View> :
     
-        <WrapElt color={'#8cd3ff'}>
-            <View style={{flex:1,backgroundColor:'#8cd3ff',width:'100%'}}>
+        <WrapElt color={'#55aaff'}>
+            <View style={{flex:1,backgroundColor:'#55aaff',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
-                backgroundColor:'#8cd3ff',
+                backgroundColor:'#55aaff',
                 width:30,
                 height:30,
                 padding:4, 
@@ -103,7 +103,7 @@ export default function PlanningScreen({navigation}) {
             </View>
 <View >
 
-            <View style={{backgroundColor:'#8cd3ff',padding:8,height:'42%'}}>
+            <View style={{backgroundColor:'#55aaff',padding:8,height:'42%'}}>
             <CalendarPicker  
                 todayBackgroundColor='#fafafa'
                 previousTitle={user.LAN== 'F' ?'Avant' : 'Previous'}
@@ -177,9 +177,7 @@ export default function PlanningScreen({navigation}) {
                         
                   
             <View style={{padding:20,flex:1}}>
-            <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#191970',marginTop:8}} >
-                    {user.LAN == 'F'?`${'Aujourd'}'hui `:'Today '}
-                </Text>
+
                 <View style={{height:'50%',marginTop:20}}>
                     <Text> add some content </Text>
                     <Text> add some content </Text>
@@ -189,7 +187,7 @@ export default function PlanningScreen({navigation}) {
                     <Text> add some content </Text>
                 </View>
 
-
+                              {  /*
                         <TouchableOpacity  style={{
                             backgroundColor:'#d67229',
                             width:60,
@@ -205,7 +203,7 @@ export default function PlanningScreen({navigation}) {
                         }} >
                                 <Icon name="add" size={22} color='#fff' type='ionicons' ></Icon>
                             </TouchableOpacity>
-                 
+                 */}
             </View>
 
                 
