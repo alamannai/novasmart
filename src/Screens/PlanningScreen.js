@@ -9,11 +9,54 @@ import WrapElt from '../components/WrapElt';
 import { string } from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
 
-
+import { getFer, getAbs } from '../features/calendarSlice';
 import FormAdd from '../components/FormAdd';
+
 
 export default function PlanningScreen({navigation}) {
     const dispatch = useDispatch()
+    const [year, setYear] = useState(new Date().toISOString().slice(0,4))
+
+    const [daysFree, setDaysFree] = useState([])
+    const [notSame, setNotSame] = useState(false)
+    const jfer = useSelector((state) => state.calendar.Jfer);
+    const [jferState, setJferState] = useState(jfer)
+
+
+
+  const onMonthChange = (date) => {
+      console.log(date.toISOString().slice(0,4))
+
+    
+    };
+/*
+    useEffect(() => { 
+        if(String(year) != String(currentYear.toISOString().slice(0,4))){
+            setNotSame(true)
+            console.log(String(year) + '--- /' + String(currentYear.toString().slice(0,4)))
+            setYear(currentYear.toString().slice(0,4))
+            dispatch(getFer(currentYear.toString().slice(0,4)))
+                .then((response) => {
+                    console.log(response)
+                    setJferState(response)
+                })
+                .catch((error) => {
+                    // ToastAndroid.show(error, ToastAndroid.showWithGravity);
+                });
+        }                
+      },[])
+      */
+
+      useEffect(() => {
+        dispatch(getFer(year.toString().slice(0,4)))
+          .unwrap()
+          .then((response) => {
+            //console.log('gg',response)
+          })
+          .catch((error) => {
+            // ToastAndroid.show(error, ToastAndroid.showWithGravity);
+          });
+      }, [])
 
     const user = useSelector((state) => state.auth.userInfo);
 
@@ -23,17 +66,19 @@ export default function PlanningScreen({navigation}) {
         navigation.navigate(name)
       };
 
-
-      const [daysFree, setDaysFree] = useState([])
+      const [typeOfDay, setTypeOfDay] = useState('')
+    
       
   
   const isLoading = useSelector((state) => state.calendar.isLoading);
 
-  const jfer = useSelector((state) => state.calendar.Jfer);
+
+
   const abs = useSelector((state) => state.calendar.Abs);
-  useEffect(() => {
-    for (let i = 0; i < jfer.length; i++) {
-        const element = jfer[i];
+
+  useEffect(() => { 
+    for (let i = 0; i < jferState.length; i++) {
+        const element = jferState[i];
         const date =  new Date(
             element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
             element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
@@ -49,24 +94,69 @@ export default function PlanningScreen({navigation}) {
     }                     
   }, [])
   
+  
   useEffect(() => {
     for (let i = 0; i < abs.length; i++) {
         const element = abs[i];
-        const date =  new Date(
-            element.SABDN_DATV.toString().slice(0,4)+ '-'+
-            element.SABDN_DATV.toString().slice(4,6)+ '-'+
-            element.SABDN_DATV.toString().slice(6,8)
-            
-        )
-        setDaysFree(daysFree => [...daysFree, {
-            date: date, 
-            style:{backgroundColor: element.SGAB_COU},
-            textStyle: {color: '#fff'},
-        }]
+        if (element.SABDN_DATV === element.SABDN_FINV){
+            const date =  new Date(
+                element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                element.SABDN_DATV.toString().slice(6,8)
+                
+                
             )
+            setDaysFree(daysFree => [...daysFree, {
+                date: date, 
+                style:{backgroundColor: element.SGAB_COU},
+                textStyle: {color: '#1c1c1c',height:'50%'},
+            }]
+                )
+        }else{
+            if(element.SABDN_FINV.toString().slice(4,6) == element.SABDN_DATV.toString().slice(4,6))
+            {
+                const d = parseInt(element.SABDN_DATV.toString().slice(6,8)) 
+                const f = parseInt(element.SABDN_FINV.toString().slice(6,8)) 
+                console.log("debut",d,"fin",f)
+                
+                for(let i=0; i< f-d +1; i++){
+                    const date =  new Date(
+                        element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                        element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                        String(d+i)
+                    )
+                    setDaysFree(daysFree => [...daysFree, {
+                        date: date, 
+                        style:{backgroundColor: element.SGAB_COU},
+                        textStyle: {color: '#1c1c1c'},
+                    }])
+
+                }
+                console.log("true")
+            }else{
+                console.log("false")
+            }
+              
+        }
+        
+          console.log( element.SABDN_FINV.toString().slice(6,8),element.SABDN_DATV.toString().slice(6,8))
     }                     
   }, [])
-    
+
+
+const [selectedDate, setSelectedDate] = useState(new Date())
+
+  const onDateChange = (date) => {
+    const pickDate = date.toISOString().slice(0,10).replace('-' ,'').replace('-' ,'')
+    setSelectedDate(date)
+    console.log("ff",pickDate)
+
+  };
+ 
+
+
+  
+
   return (
     isLoading? 
     <View style={{flex: 1,
@@ -75,15 +165,15 @@ export default function PlanningScreen({navigation}) {
         justifyContent: "space-around",
         padding: 10
         }}>
-        <ActivityIndicator size="large" color="#3e77b6"/>
+        <ActivityIndicator size="large" color="#6EC1E4"/>
     </View> :
     
-        <WrapElt color={'#55aaff'}>
-            <View style={{flex:1,backgroundColor:'#55aaff',width:'100%'}}>
+        <WrapElt color={'#6EC1E4'}>
+            <View style={{flex:1,backgroundColor:'#6EC1E4',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
-                backgroundColor:'#55aaff',
+                backgroundColor:'#6EC1E4',
                 width:30,
                 height:30,
                 padding:4, 
@@ -103,8 +193,9 @@ export default function PlanningScreen({navigation}) {
             </View>
 <View >
 
-            <View style={{backgroundColor:'#55aaff',padding:8,height:'42%'}}>
+            <View style={{backgroundColor:'#6EC1E4',padding:8,height:'42%'}}>
             <CalendarPicker  
+                startFromMonday={true}
                 todayBackgroundColor='#fafafa'
                 previousTitle={user.LAN== 'F' ?'Avant' : 'Previous'}
                 nextTitle={user.LAN== 'F' ?'Aprés' : 'Next'}
@@ -127,9 +218,9 @@ export default function PlanningScreen({navigation}) {
                     ['January','February','March','April','May','June','July','August','September','October','November','December']
                 }
                 weekdays={user.LAN== 'F' ? 
-                    ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+                    ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam','Dim']
                     :
-                    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun']
                 }
                 textStyle={{
                     color: '#fff',
@@ -140,7 +231,10 @@ export default function PlanningScreen({navigation}) {
                   }}
 
                   customDatesStyles={daysFree}
-                  enableDateChange={false}
+                  onDateChange={onDateChange}
+
+              //   onMonthChange={onMonthChange}
+        
 
                 />
                 
@@ -179,12 +273,10 @@ export default function PlanningScreen({navigation}) {
             <View style={{padding:20,flex:1}}>
 
                 <View style={{height:'50%',marginTop:20}}>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
+                    <Text>Selected date : </Text>
+                    <Text> {selectedDate.toString().slice(3,15)}</Text>
+                    <Text>Type of the day :{typeOfDay}</Text>
+                    <Text>year :{year}</Text>
                 </View>
 
                               {  /*

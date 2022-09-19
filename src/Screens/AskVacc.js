@@ -6,12 +6,13 @@ import { useState, useEffect } from 'react';
 import {  getMenu } from '../features/menuSlice';
 import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
+import TextInput from '../components/TextInput'
 import { string } from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getFer } from '../features/calendarSlice';
 
 import FormAdd from '../components/FormAdd';
-
+import DropDownPicker from 'react-native-dropdown-picker';
 export default function AskVacc({navigation}) {
     const dispatch = useDispatch()
 
@@ -27,6 +28,14 @@ export default function AskVacc({navigation}) {
       const [daysFree, setDaysFree] = useState([])
       
   const jfer = useSelector((state) => state.calendar.Jfer);
+
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Apple', value: 'apple'},
+    {label: 'Banana', value: 'banana'}
+  ]);
 
   return (
         <WrapElt color={'#55aaff'}>
@@ -51,18 +60,6 @@ export default function AskVacc({navigation}) {
             
     
     
-            </View>
-<View >
-
-            <View style={{backgroundColor:'#55aaff',padding:8}}>
-
-                
-          
-            {/*<TouchableOpacity style={[styles.addBtn,styles.elevation]} >
-                <Icon name="add" size={18} color='white' type='ionicon' ></Icon>
-                </TouchableOpacity>*/}
-            </View>
-            
             </View>
             
     
@@ -93,13 +90,35 @@ export default function AskVacc({navigation}) {
             <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#191970',marginTop:8}} >
                     {user.LAN == 'F'?'Demande un congé':'Ask for leave '}
                 </Text>
+
+
+      
                 <View style={{height:'50%',marginTop:20}}>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
-                    <Text> add some content </Text>
+                    <View style={{marginTop:20}}>
+                        <DropDownPicker
+                            open={open}
+                            value={value}
+                            items={items}
+                            setOpen={setOpen}
+                            setValue={setValue}
+                            setItems={setItems}
+                            />
+                    </View>
+                
+                    <View style={{marginTop:20}}>
+                    <TextInput
+                 //onChangeText={formik.handleChange("reference")}
+                 //value={formik.values.reference}
+                 name="type"
+                 label={'Pourcentage din'}
+                 //onBlur={formik.handleBlur("reference")}
+                 keyboardType="numeric"
+                 //error={formik.errors.reference}
+                 returnKeyType="next"
+              />
+                    </View>
+              
+
                 </View>
 
 

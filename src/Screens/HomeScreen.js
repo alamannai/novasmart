@@ -72,16 +72,16 @@ export default function HomeScreen({navigation}) {
       const isLoading = useSelector((state) => state.menu.isLoading);
 
  
-  useEffect(() => {
+  /*useEffect(() => {
     dispatch(getFer(date.toISOString().slice(0,4)))
       .unwrap()
       .then((response) => {
-        console.log('gg')
+        console.log('gg',response)
       })
       .catch((error) => {
         // ToastAndroid.show(error, ToastAndroid.showWithGravity);
       });
-  }, [])
+  }, [])*/
 
   useEffect(() => {
     dispatch(getAbs(date.toISOString().slice(0,4)))
