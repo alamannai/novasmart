@@ -251,7 +251,7 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
                     calendarBackground: '#6EC1E4',
                     monthTextColor: '#fff',
                     dayTextColor: '#fff',
-                    selectedDayTextColor: '#000',
+                    selectedDayTextColor: '#0e2433',
                     todayTextColor: 'red',
                     textSectionTitleColor: '#fff',
                 }}

@@ -46,11 +46,31 @@ const getFerie = async (lan,mat, startDate,endDate, username,pas,prg, token) => 
 
   }
 
+
+
+  
+  const getMotifs = async (lan,pas, token) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    return await axios.post(REACT_APP_API_URL+ '/GetMOTIFABS', 
+    data= {
+        "LAN":lan,
+         "PAS":pas,
+        }, config )
+      .then((response) => {
+        return response.data;
+  });
+
+  }
   
 
 const calendarService = {
     getFerie,
-    getAbs
+    getAbs,
+    getMotifs
 };
 
 export default calendarService;

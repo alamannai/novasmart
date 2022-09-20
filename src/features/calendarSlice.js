@@ -75,11 +75,37 @@ export const getAbs = createAsyncThunk(
   }
 )
 
+// Get motif abs
+export const getMotifAbs = createAsyncThunk(
+  'menu/Motifabs',
+  async ( thunkAPI) => {
+    try {
 
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+      const user = JSON.parse(localStorage.getItem("user"));
+      const data = await CalendarService.getMotifs(
+          user.LAN,
+          user.SCIV_PAS,
+          accessToken
+      )
+
+      return data
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return error
+    }
+  }
+)
 
   const initialState = {
     Jfer: [],
     Abs: [],
+    Motifs: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -120,6 +146,19 @@ export const calendarSlice = createSlice({
           state.Abs = action.payload
         })
         .addCase(getAbs.rejected, (state, action) => {
+          state.isLoading = false
+          state.isError = true
+        })
+        .addCase(getMotifAbs.pending, (state) => {
+          state.isLoading = true
+        })
+        .addCase(getMotifAbs.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          //state.Jfer = action.payload
+          state.Motifs = action.payload
+        })
+        .addCase(getMotifAbs.rejected, (state, action) => {
           state.isLoading = false
           state.isError = true
         })

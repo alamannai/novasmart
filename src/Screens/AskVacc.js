@@ -9,10 +9,13 @@ import WrapElt from '../components/WrapElt';
 import TextInput from '../components/TextInput'
 import { string } from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getFer } from '../features/calendarSlice';
+import { getMotifAbs } from '../features/calendarSlice';
 
 import FormAdd from '../components/FormAdd';
 import DropDownPicker from 'react-native-dropdown-picker';
+
+
+
 export default function AskVacc({navigation}) {
     const dispatch = useDispatch()
 
@@ -36,6 +39,20 @@ export default function AskVacc({navigation}) {
     {label: 'Apple', value: 'apple'},
     {label: 'Banana', value: 'banana'}
   ]);
+
+
+
+  useEffect(() => {
+    dispatch(getMotifAbs())
+      .unwrap()
+      .then((response) => {
+        console.log('--------------getting motifs-----------',response)
+        console.log('--------------getting motifs-----------',response.length)
+      })
+      .catch((error) => {
+        // ToastAndroid.show(error, ToastAndroid.showWithGravity);
+      });
+  }, [])
 
   return (
         <WrapElt color={'#55aaff'}>
