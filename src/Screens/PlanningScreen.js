@@ -2,7 +2,7 @@ import { StyleSheet, Modal, Pressable, Text, View, ActivityIndicator, TouchableO
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {  getMenu } from '../features/menuSlice';
 import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
@@ -11,52 +11,22 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { getFer, getAbs } from '../features/calendarSlice';
 import FormAdd from '../components/FormAdd';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+
+
 
 
 export default function PlanningScreen({navigation}) {
+    
     const dispatch = useDispatch()
-    const [year, setYear] = useState(new Date().toISOString().slice(0,4))
+    const [currentYear, setCurrentYear] = useState(new Date().toISOString().slice(0,4))
+    const [year, setYear] = useState(currentYear)
 
-    const [daysFree, setDaysFree] = useState([])
-    const [notSame, setNotSame] = useState(false)
+    const [daysFree, setDaysFree] = useState({})
     const jfer = useSelector((state) => state.calendar.Jfer);
     const [jferState, setJferState] = useState(jfer)
 
-
-
-  const onMonthChange = (date) => {
-      console.log(date.toISOString().slice(0,4))
-
-    
-    };
-/*
-    useEffect(() => { 
-        if(String(year) != String(currentYear.toISOString().slice(0,4))){
-            setNotSame(true)
-            console.log(String(year) + '--- /' + String(currentYear.toString().slice(0,4)))
-            setYear(currentYear.toString().slice(0,4))
-            dispatch(getFer(currentYear.toString().slice(0,4)))
-                .then((response) => {
-                    console.log(response)
-                    setJferState(response)
-                })
-                .catch((error) => {
-                    // ToastAndroid.show(error, ToastAndroid.showWithGravity);
-                });
-        }                
-      },[])
-      */
-
-      useEffect(() => {
-        dispatch(getFer(year.toString().slice(0,4)))
-          .unwrap()
-          .then((response) => {
-            //console.log('gg',response)
-          })
-          .catch((error) => {
-            // ToastAndroid.show(error, ToastAndroid.showWithGravity);
-          });
-      }, [])
+    const [initialDate, setInitialDate] = useState(new Date())
 
     const user = useSelector((state) => state.auth.userInfo);
 
@@ -76,75 +46,157 @@ export default function PlanningScreen({navigation}) {
 
   const abs = useSelector((state) => state.calendar.Abs);
 
+
+
+  const [nyear, setNyear] = useState([])
+  const [nyearAbs, setNyearAbs] = useState([])
+
   useEffect(() => { 
-    for (let i = 0; i < jferState.length; i++) {
-        const element = jferState[i];
-        const date =  new Date(
-            element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
-            element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
-            element.XSJFEEMP_DATF.toString().slice(6,8)
-            
-        )
-        setDaysFree(daysFree => [...daysFree, {
-            date: date, 
-            style:{backgroundColor: element.XSJFEEMP_COU},
-            textStyle: {color: '#1c1c1c'},
-        }]
-            )
-    }                     
-  }, [])
-  
-  
-  useEffect(() => {
-    for (let i = 0; i < abs.length; i++) {
-        const element = abs[i];
+    dispatch(getFer(year))
+        .unwrap()
+        .then((response) => {
+            setNyear(response)
+        })
+        .catch((error) => {
+        // ToastAndroid.show(error, ToastAndroid.showWithGravity);
+        });                   
+  }, [year])
+
+
+useEffect(() => { 
+    dispatch(getAbs(year))
+        .unwrap()
+        .then((response) => {
+            setNyearAbs(response)
+            console.log("abs diff year",response)
+        })
+        .catch((error) => {
+        // ToastAndroid.show(error, ToastAndroid.showWithGravity);
+        });                   
+  }, [year])
+
+  const marked = useMemo(() => {
+    const obj = {}
+    // diff year jferie
+    for (let i = 0; i < nyear.length; i++) {
+        const element = nyear[i];
+        const sc = element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
+                    element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
+                    element.XSJFEEMP_DATF.toString().slice(6,8)
+
+
+        obj[sc]={
+            selected: true, 
+            selectedColor: element.XSJFEEMP_COU,
+          }
+    }
+      // diff year abs
+      for (let i = 0; i < nyearAbs.length; i++) {
+        const element = nyearAbs[i];
         if (element.SABDN_DATV === element.SABDN_FINV){
-            const date =  new Date(
+            const date = 
                 element.SABDN_DATV.toString().slice(0,4)+ '-'+
                 element.SABDN_DATV.toString().slice(4,6)+ '-'+
                 element.SABDN_DATV.toString().slice(6,8)
                 
-                
-            )
-            setDaysFree(daysFree => [...daysFree, {
-                date: date, 
-                style:{backgroundColor: element.SGAB_COU},
-                textStyle: {color: '#1c1c1c',height:'50%'},
-            }]
-                )
+            obj[date]={
+                selected: true, 
+                selectedColor: element.SGAB_COU,
+                }
         }else{
-            if(element.SABDN_FINV.toString().slice(4,6) == element.SABDN_DATV.toString().slice(4,6))
-            {
-                const d = parseInt(element.SABDN_DATV.toString().slice(6,8)) 
-                const f = parseInt(element.SABDN_FINV.toString().slice(6,8)) 
-                console.log("debut",d,"fin",f)
+           
+                const d =   element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                            element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                            element.SABDN_DATV.toString().slice(6,8)
+
+                const f =   element.SABDN_FINV.toString().slice(0,4)+ '-'+
+                            element.SABDN_FINV.toString().slice(4,6)+ '-'+
+                            element.SABDN_FINV.toString().slice(6,8)
                 
-                for(let i=0; i< f-d +1; i++){
-                    const date =  new Date(
+                const dd = parseInt(element.SABDN_DATV.toString().slice(6,8)) 
+                const ff = parseInt(element.SABDN_FINV.toString().slice(6,8)) 
+                
+                for(let i=0; i< ff-dd +1; i++){
+                    const nd =  
                         element.SABDN_DATV.toString().slice(0,4)+ '-'+
                         element.SABDN_DATV.toString().slice(4,6)+ '-'+
-                        String(d+i)
-                    )
-                    setDaysFree(daysFree => [...daysFree, {
-                        date: date, 
-                        style:{backgroundColor: element.SGAB_COU},
-                        textStyle: {color: '#1c1c1c'},
-                    }])
+                        String(dd+i)
+                
+                    obj[nd]={
+                        selected: true, 
+                        selectedColor: element.SGAB_COU,
+    
+                        }
 
                 }
-                console.log("true")
-            }else{
-                console.log("false")
-            }
-              
-        }
-        
-          console.log( element.SABDN_FINV.toString().slice(6,8),element.SABDN_DATV.toString().slice(6,8))
-    }                     
-  }, [])
 
 
-const [selectedDate, setSelectedDate] = useState(new Date())
+                }
+
+    }
+    // curr year jferie
+    for (let i = 0; i < jferState.length; i++) {
+        const element = jferState[i];
+        const sc = element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
+                    element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
+                    element.XSJFEEMP_DATF.toString().slice(6,8)
+
+
+        obj[sc]={
+            selected: true, 
+            selectedColor: element.XSJFEEMP_COU,
+          }
+    }
+    // curr year abs
+    for (let i = 0; i < abs.length; i++) {
+        const element = abs[i];
+        if (element.SABDN_DATV === element.SABDN_FINV){
+            const date = 
+                element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                element.SABDN_DATV.toString().slice(6,8)
+                
+            obj[date]={
+                selected: true, 
+                selectedColor: element.SGAB_COU,
+                }
+        }else{
+           
+                const d =   element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                            element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                            element.SABDN_DATV.toString().slice(6,8)
+
+                const f =   element.SABDN_FINV.toString().slice(0,4)+ '-'+
+                            element.SABDN_FINV.toString().slice(4,6)+ '-'+
+                            element.SABDN_FINV.toString().slice(6,8)
+                
+                const dd = parseInt(element.SABDN_DATV.toString().slice(6,8)) 
+                const ff = parseInt(element.SABDN_FINV.toString().slice(6,8)) 
+                
+                for(let i=0; i< ff-dd +1; i++){
+                    const nd =  
+                        element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                        element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                        String(dd+i)
+                
+                    obj[nd]={
+                        selected: true, 
+                        selectedColor: element.SGAB_COU,
+    
+                        }
+
+                }
+
+
+                }
+
+    } 
+    return obj  
+  },[nyear,year]);
+ 
+
+
+const [selectedDate, setSelectedDate] = useState([new Date()])
 
   const onDateChange = (date) => {
     const pickDate = date.toISOString().slice(0,10).replace('-' ,'').replace('-' ,'')
@@ -158,16 +210,6 @@ const [selectedDate, setSelectedDate] = useState(new Date())
   
 
   return (
-    isLoading? 
-    <View style={{flex: 1,
-        justifyContent: "center",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        padding: 10
-        }}>
-        <ActivityIndicator size="large" color="#6EC1E4"/>
-    </View> :
-    
         <WrapElt color={'#6EC1E4'}>
             <View style={{flex:1,backgroundColor:'#6EC1E4',width:'100%'}}>
   
@@ -187,14 +229,48 @@ const [selectedDate, setSelectedDate] = useState(new Date())
             </TouchableOpacity>
     
 
-            
+            {isLoading? 
+                <View style={{
+                    position:'absolute',top:40,left:'45%'
+                    }}>
+                    <ActivityIndicator size="large" color="#fff"/>
+                </View> : 
+                <View></View>
+            }
     
     
             </View>
 <View >
 
-            <View style={{backgroundColor:'#6EC1E4',padding:8,height:'42%'}}>
-            <CalendarPicker  
+            <View style={{backgroundColor:'#6EC1E4',padding:8,height:'42%',position:'relative'}}>
+            
+            <Calendar 
+
+                theme={{
+                    arrowColor: '#fff',
+                    calendarBackground: '#6EC1E4',
+                    monthTextColor: '#fff',
+                    dayTextColor: '#fff',
+                    selectedDayTextColor: '#000',
+                    todayTextColor: 'red',
+                    textSectionTitleColor: '#fff',
+                }}
+                // Collection of dates that have to be marked. Default = {}
+                markedDates={marked}
+                onDayPress={day => {
+                    setSelectedDate(day.dateString)
+                    console.log('day pressed',selectedDate);
+                  }}
+
+                  onMonthChange={month => {
+                    if (month.year != year){
+                        setYear(month.year)
+                        console.log('year changed', month);
+                    }
+                    console.log('month changed', month);
+                  }}
+                />
+          {  /*<CalendarPicker  
                 startFromMonday={true}
                 todayBackgroundColor='#fafafa'
                 previousTitle={user.LAN== 'F' ?'Avant' : 'Previous'}
@@ -233,10 +309,9 @@ const [selectedDate, setSelectedDate] = useState(new Date())
                   customDatesStyles={daysFree}
                   onDateChange={onDateChange}
 
-              //   onMonthChange={onMonthChange}
         
 
-                />
+                />*/}
                 
           
             {/*<TouchableOpacity style={[styles.addBtn,styles.elevation]} >
@@ -250,7 +325,7 @@ const [selectedDate, setSelectedDate] = useState(new Date())
             <View style={[styles.elevation,{
                 backgroundColor:'#fff',
                 padding:8,
-                marginTop:40,
+                marginTop:70,
                 flex:1,
                 position:'relative',
                 borderTopRightRadius:  30,
@@ -274,28 +349,10 @@ const [selectedDate, setSelectedDate] = useState(new Date())
 
                 <View style={{height:'50%',marginTop:20}}>
                     <Text>Selected date : </Text>
-                    <Text> {selectedDate.toString().slice(3,15)}</Text>
-                    <Text>Type of the day :{typeOfDay}</Text>
-                    <Text>year :{year}</Text>
-                </View>
 
-                              {  /*
-                        <TouchableOpacity  style={{
-                            backgroundColor:'#d67229',
-                            width:60,
-                            height:60,
-                            padding:4, 
-                            borderRadius:10, 
-                            alignItems: "center",
-                            justifyContent:'center',
-                            position:'absolute',
-                            right:20,
-                            bottom:30
-                            
-                        }} >
-                                <Icon name="add" size={22} color='#fff' type='ionicons' ></Icon>
-                            </TouchableOpacity>
-                 */}
+
+                   
+                </View>
             </View>
 
                 

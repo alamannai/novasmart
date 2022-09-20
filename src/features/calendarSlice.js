@@ -49,8 +49,8 @@ export const getAbs = createAsyncThunk(
   'menu/abs',
   async (year, thunkAPI) => {
     try {
-      const startDate = '20220101'
-      const endDate = '20221231'
+      const startDate = year+'0101'
+      const endDate =  year+'1231'
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
       const user = JSON.parse(localStorage.getItem("user"));
       const data = await CalendarService.getAbs(

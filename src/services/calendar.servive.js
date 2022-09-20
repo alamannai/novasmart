@@ -41,7 +41,6 @@ const getFerie = async (lan,mat, startDate,endDate, username,pas,prg, token) => 
          "SABD_PAS":pas,
         }, config )
       .then((response) => {
-        console.log('service abs', response)
         return response.data;
   });
 

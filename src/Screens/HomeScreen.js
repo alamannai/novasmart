@@ -9,7 +9,7 @@ import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
 import { string } from 'yup';
 import { getFer, getAbs } from '../features/calendarSlice';
-
+import { logout } from '../features/authSlice';
 import { Avatar } from "@rneui/themed";
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -72,7 +72,7 @@ export default function HomeScreen({navigation}) {
       const isLoading = useSelector((state) => state.menu.isLoading);
 
  
-  /*useEffect(() => {
+  useEffect(() => {
     dispatch(getFer(date.toISOString().slice(0,4)))
       .unwrap()
       .then((response) => {
@@ -81,7 +81,7 @@ export default function HomeScreen({navigation}) {
       .catch((error) => {
         // ToastAndroid.show(error, ToastAndroid.showWithGravity);
       });
-  }, [])*/
+  }, [])
 
   useEffect(() => {
     dispatch(getAbs(date.toISOString().slice(0,4)))
@@ -138,7 +138,7 @@ export default function HomeScreen({navigation}) {
 
             </View>
  */}
-            <TouchableOpacity  style={{
+            <TouchableOpacity style={{
                         backgroundColor:'#fafafa',
                         height:30,
                         width:30,           
@@ -148,7 +148,7 @@ export default function HomeScreen({navigation}) {
                         right:20,
                         top:20
                         }}>
-                        <Icon name="notifications-outline" size={20} color={'#000'} type='ionicon'></Icon>
+                        <Icon name="logout" size={20} color={'#000'} type='antdesign'></Icon>
                        
                     </TouchableOpacity>
                  <TouchableOpacity  style={{
