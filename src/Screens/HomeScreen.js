@@ -1,8 +1,8 @@
-import { StyleSheet, Modal, ActivityIndicator, Text, View, FlatList, TouchableOpacity , Image, Pressable} from 'react-native';
+import { StyleSheet, Animated, ActivityIndicator, Text, View, FlatList, TouchableOpacity , Image, SafeAreaView} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {  getMenu } from '../features/menuSlice';
 
 import { useDispatch ,useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import { logout } from '../features/authSlice';
 import { Avatar } from "@rneui/themed";
 import { ScrollView } from 'react-native-gesture-handler';
 
-
+import {StackActions} from '@react-navigation/native';
 
 export default function HomeScreen({navigation}) {
 
@@ -71,7 +71,7 @@ export default function HomeScreen({navigation}) {
    
       const isLoading = useSelector((state) => state.menu.isLoading);
 
- 
+      const Load = useSelector((state) => state.auth.loading);
   useEffect(() => {
     dispatch(getFer(date.toISOString().slice(0,4)))
       .unwrap()
@@ -95,8 +95,25 @@ export default function HomeScreen({navigation}) {
       });
   }, [])
 
+
+  const [currentTab, setCurrentTab] = useState("Home");
+  // To get the curretn Status of menu ...
+  const [showMenu, setShowMenu] = useState(false);
+
+  // Animated Properties...
+
+  const offsetValue = useRef(new Animated.Value(0)).current;
+  // Scale Intially must be One...
+  const scaleValue = useRef(new Animated.Value(1)).current;
+  const closeButtonOffset = useRef(new Animated.Value(0)).current;
+
+  function out() {
+    console.log("logout")
+    dispatch(logout())
+    console.log('user data',user)
+  };
   return (
-    isLoading? 
+    Load || isLoading? 
     <View style={{flex: 1,
         justifyContent: "center",
         flexDirection: "row",
@@ -107,7 +124,129 @@ export default function HomeScreen({navigation}) {
     </View> :
     
         <WrapElt color={'#fafafa'}>
-            <View style={{
+
+{/*
+<SafeAreaView style={{ 
+    backgroundColor: '#5359D1',
+    alignItems: 'flex-start',
+    width:'100%'}}>
+
+        <View style={{ justifyContent: 'flex-start', padding: 15 }}>
+        
+
+        <View style={{ flexGrow: 1, marginTop: 50 }}>
+            {
+            // Tab Bar Buttons....
+            }
+
+            {TabButton(currentTab, setCurrentTab, "Home")}
+            {TabButton(currentTab, setCurrentTab, "Planning")}
+            {TabButton(currentTab, setCurrentTab, "Notifications")}
+            {TabButton(currentTab, setCurrentTab, "Settings")}
+
+        </View>
+
+        <View>
+            {TabButton(currentTab, setCurrentTab, "Logout",)}
+        </View>
+
+        </View>
+            {
+        // Over lay View...
+      }
+
+      <Animated.View style={{
+        flexGrow: 1,
+        backgroundColor: 'white',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        paddingHorizontal: 15,
+        paddingVertical: 20,
+        borderRadius: showMenu ? 15 : 0,
+        // Transforming View...
+        transform: [
+          { scale: scaleValue },
+          { translateX: offsetValue }
+        ]
+      }}>
+
+        {
+          // Menu Button...
+        }
+
+        <Animated.View style={{
+          transform: [{
+            translateY: closeButtonOffset
+          }]
+        }}>
+          <TouchableOpacity onPress={() => {
+            // Do Actions Here....
+            // Scaling the view...
+            Animated.timing(scaleValue, {
+              toValue: showMenu ? 1 : 0.88,
+              duration: 300,
+              useNativeDriver: true
+            })
+              .start()
+
+            Animated.timing(offsetValue, {
+              // YOur Random Value...
+              toValue: showMenu ? 0 : 230,
+              duration: 300,
+              useNativeDriver: true
+            })
+              .start()
+
+            Animated.timing(closeButtonOffset, {
+              // YOur Random Value...
+              toValue: !showMenu ? -30 : 0,
+              duration: 300,
+              useNativeDriver: true
+            })
+              .start()
+
+            setShowMenu(!showMenu);
+          }}>
+
+            <Icon name={showMenu ? 'close' : 'menu'} type='ionicons' style={{
+              width: 20,
+              height: 20,
+              tintColor: 'black',
+              marginTop: 40,
+
+            }}></Icon>
+
+          </TouchableOpacity>
+
+
+
+                    <View style={{flexDirection:'row' ,alignItems:'center',marginLeft:'5%',marginTop:'10%'}}>
+                    <Text style={{fontSize:22,fontWeight:'300',color:'#1c1c1c'}} >
+                        {user.LAN == 'F'?'Bonjour,  ':'Hello,  '}
+                        </Text>
+                    <Text style={{fontSize:22,fontWeight:'700',color:'#1c1c1c'}}>
+                        {user.SCIV_PRE}
+                    </Text>
+                    </View>
+                    <Text style={{fontSize:14,fontWeight:'400',color:'1c1c1c',opacity:0.2,marginLeft:'5%',marginTop:10}}>
+                    {user.LAN == 'F'?'Bonne Journée .':'Have a nice day .'}
+                    </Text>
+
+
+          
+
+        </Animated.View>
+
+      </Animated.View>
+
+
+      </SafeAreaView>*/}
+
+
+           <View style={{
                 height:'20%',
                 width:'100%',
                 backgroundColor:'#fafafa',
@@ -125,20 +264,9 @@ export default function HomeScreen({navigation}) {
                     <Text style={{fontSize:14,fontWeight:'400',color:'1c1c1c',opacity:0.2,marginLeft:'5%',marginTop:10}}>
                     {user.LAN == 'F'?'Bonne Journée .':'Have a nice day .'}
                     </Text>
-                    {/**
-            <View style={{position:'absolute',right:40,bottom:30}}>
-                <Avatar
-                    size={76}
-                    rounded
-                    source={{
-                        uri:
-                          'https://dummyimage.com/100x100/000/fff',
-                      }}
-                />
 
-            </View>
- */}
-            <TouchableOpacity style={{
+            <TouchableOpacity onPress={out}
+             style={{
                         backgroundColor:'#fafafa',
                         height:30,
                         width:30,           
@@ -151,7 +279,8 @@ export default function HomeScreen({navigation}) {
                         <Icon name="logout" size={20} color={'#000'} type='antdesign'></Icon>
                        
                     </TouchableOpacity>
-                 <TouchableOpacity  style={{
+                 <TouchableOpacity onPress={() => navigation.openDrawer()}
+                   style={{
                         backgroundColor:'#fafafa',
                         height:30,
                         width:30,           
@@ -164,9 +293,8 @@ export default function HomeScreen({navigation}) {
                         <Icon name="md-menu-outline" size={20} color={'#000'} type='ionicon'></Icon>
                     </TouchableOpacity>
 
-            
-            </View>
 
+            </View>
 
 
 
@@ -183,17 +311,7 @@ export default function HomeScreen({navigation}) {
             borderRadius:10,
             backgroundColor:'#3964bc',
             }]}>
-                {/** <Image source={require('../../assets/cart-bg.jpg')} style={{
-                    width:'100%',
-                    flex:1,
-                    height:120,
-                    borderRadius:8,
-                    position:'absolute',
-                    top:0,
-
-                    alignSelf:'center',backgroundColor:'#fafafa'
-                    }} 
-                    />*/}
+               
                     <View key={item.ZMOD_ID} style={{padding:8,height:'20%'}}>
 
 
@@ -245,7 +363,7 @@ export default function HomeScreen({navigation}) {
                         justifyContent:'center',
                         position:'relative'
                         }]}>
-                    <Text>gg</Text>
+                    <Text>Suivre mes demandes</Text>
                     <TouchableOpacity style={{
                         backgroundColor:'#3964bc',
                         height:80,
@@ -270,7 +388,7 @@ export default function HomeScreen({navigation}) {
                         justifyContent:'center',
                         position:'relative'
                         }]}>
-                    <Text>gg</Text>
+                    <Text>Valider une action</Text>
                     <TouchableOpacity style={{
                         backgroundColor:'#3964bc',
                         height:80,
@@ -292,6 +410,46 @@ export default function HomeScreen({navigation}) {
     </WrapElt>
   );
 }
+
+
+// For multiple Buttons...
+const TabButton = (currentTab, setCurrentTab, title, image) => {
+    return (
+  
+      <TouchableOpacity onPress={() => {
+        if (title == "Logout") {
+          // Do your Stuff...
+        } else {
+          setCurrentTab(title)
+        }
+      }}>
+        <View style={{
+          flexDirection: "row",
+          alignItems: 'center',
+          paddingVertical: 8,
+          backgroundColor: currentTab == title ? 'white' : 'transparent',
+          paddingLeft: 13,
+          paddingRight: 35,
+          borderRadius: 8,
+          marginTop: 15
+        }}>
+  
+          <Image source={image} style={{
+            width: 25, height: 25,
+            tintColor: currentTab == title ? "#5359D1" : "white"
+          }}></Image>
+  
+          <Text style={{
+            fontSize: 15,
+            fontWeight: 'bold',
+            paddingLeft: 15,
+            color: currentTab == title ? "#5359D1" : "white"
+          }}>{title}</Text>
+  
+        </View>
+      </TouchableOpacity>
+    );
+  }
 
 const styles = StyleSheet.create({
     headerText:{

@@ -63,7 +63,6 @@ export const menuSlice = createSlice({
         .addCase(getMenu.fulfilled, (state, action) => {
           state.isLoading = false
           state.isSuccess = true
-          console.log("payload", action.payload)
           state.menu = action.payload
         })
         .addCase(getMenu.rejected, (state, action) => {

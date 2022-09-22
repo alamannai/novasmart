@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, Dimensions, Image  } from 'react-native'
 import {  getMenu } from '../features/menuSlice';
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
@@ -13,8 +13,9 @@ import Checkbox from "expo-checkbox";
 import { login, reset  } from "../features/authSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { Icon } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
+import { Pressable } from 'react-native';
 
 const loginSceenLang = [{
   id:1,
@@ -102,8 +103,15 @@ export default function LoginScreen({ navigation }) {
         });
     };
 
+    const [secure, setSecure] = useState(true);
 
+    const [showSettings, setShowSettings] = useState(false);
 
+    const handleShowForm = () => {
+      navigation.navigate('param')
+    };
+
+    const {width, height} = Dimensions.get("window");
     return(
         <Background>
           {alert.length == 0?<View></View> :
@@ -116,20 +124,38 @@ export default function LoginScreen({ navigation }) {
           
           }
          
-          <View style={{width:'100%',marginTop:8, alignItems:'flex-end'}}>
-          <BtnIcon />
+          <View style={{width:'100%',marginTop:'10%', alignItems:'flex-end',position:'relative'}}>
+          <BtnIcon event={handleShowForm} />
+
+   
+              
+
+
           </View>
 
 
           <Logo />
              <Header>{lang === 'e'? loginSceenLang[1].elt[2].text : loginSceenLang[0].elt[2].text}</Header>
              <View style={{flexDirection: "column", width:'100%' ,justifyContent: "space-between"}}>
+             <View style={{position:'relative'}}>
               <TextInput
                   label={lang === 'e'? loginSceenLang[1].elt[1].input[0] : loginSceenLang[0].elt[1].input[0]}
                   returnKeyType="next"
                   value={formik.values.username}
                   onChangeText={formik.handleChange("username")}
               />
+              <View 
+              style={{
+                position:'absolute',
+                right:10,
+                top:'40%',
+                height:40,
+                zIndex:1}}>
+                  <Icon name="user" size={22} color={'#000'} type='feather'></Icon>
+
+
+              </View>
+              </View>
               {formik.errors.username? 
                 <Text style={{color:'red',fontWeight:'600',fontSize:14, marginLeft:10}}>{formik.errors.username }</Text>
               :  
@@ -138,13 +164,31 @@ export default function LoginScreen({ navigation }) {
 
              </View>
              <View style={{flexDirection: "column", width:'100%' ,justifyContent: "space-between"}}>
+              <View style={{position:'relative'}}>
               <TextInput
                   label={lang === 'e'? loginSceenLang[1].elt[1].input[1] : loginSceenLang[0].elt[1].input[1]}
                   returnKeyType="done"
                   value={formik.values.password}
                   onChangeText={formik.handleChange("password")}
-                  secureTextEntry
+                  secureTextEntry={secure}
               />
+              <Pressable onPress={ () =>{ setSecure(!secure)}} 
+              style={{
+                position:'absolute',
+                right:10,
+                top:'40%',
+                height:40,
+                zIndex:1}}>
+                  {secure? 
+                  <Icon name="eye" size={22} color={'#000'} type='feather'></Icon>
+                  :
+                  <Icon name="eye-off" size={22} color={'#000'} type='feather'></Icon>
+                  }
+
+              </Pressable>
+              
+              
+              </View>
               {formik.errors.password? 
                 <Text style={{color:'red',fontWeight:'600',fontSize:14, marginLeft:10, marginBottom:20}}>{formik.errors.password}</Text>
                 :
@@ -182,6 +226,10 @@ export default function LoginScreen({ navigation }) {
                   {lang === 'e'? loginSceenLang[1].elt[0].btn[0] : loginSceenLang[0].elt[0].btn[0]}
                   </Text>
                 </TouchableOpacity>
+      
+            
+        
+             
  
         </Background>
     );

@@ -1,20 +1,31 @@
 import React from 'react'
-import { ImageBackground, StyleSheet,SafeAreaView, KeyboardAvoidingView, Platform, View } from 'react-native'
+import { Image, StyleSheet,SafeAreaView, KeyboardAvoidingView, Platform, View } from 'react-native'
 import { theme } from '../core/theme'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import { StatusBar } from 'expo-status-bar';
+import { ZoomIn, ZoomInDown } from 'react-native-reanimated';
 export default function Background({ children }) {
   return (
     <SafeAreaView
       style={styles.background}
     >
-      <KeyboardAwareScrollView 
-        contentContainerStyle={{flexGrow: 1,paddingVertical: 25,}}
-        showsHorizontalScrollIndicator={false} >
-        <View style={styles.container}>
+          <View
+      style={{
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height:40,
+        
+      }}>
+      <StatusBar style="dark"  />
+    </View>
+      <Image source={require('../../assets/gg.jpg')} style={styles.imageRev} />
+
+        <View  style={styles.container}>
         {children}
         </View>
-      </KeyboardAwareScrollView>
+     {/* <Image source={require('../../assets/gg.jpg')} style={styles.image} />*/}
     </SafeAreaView>
   )
 }
@@ -24,14 +35,30 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: theme.colors.surface,
+    position:'relative'
   },
   container: {
-    flex: 1,
-    padding: 18,
+    padding: '8%',
     width: '100%',
-    maxWidth: 340,
-    alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+
+    position:'absolute',
+    top:'10%'
+  },
+  image: {
+    width: '100%',
+    height: 120,
+    position:'absolute',
+    bottom:0,
+    zIndex:-1
+  },
+  imageRev: {
+    width: '100%',
+    height: 80,
+
+    position:'absolute',
+    rotation:180
+
   },
 })

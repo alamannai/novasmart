@@ -1,4 +1,4 @@
-import { StyleSheet, Modal, Pressable, Text, View, FlatList, TouchableOpacity , Image} from 'react-native';
+import { StyleSheet, Modal, ActivityIndicator, Text, View, FlatList, TouchableOpacity , Image} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -13,6 +13,8 @@ import { getMotifAbs } from '../features/calendarSlice';
 
 import FormAdd from '../components/FormAdd';
 import DropDownPicker from 'react-native-dropdown-picker';
+
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 
 
@@ -36,8 +38,6 @@ export default function AskVacc({navigation}) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'}
   ]);
 
 
@@ -47,20 +47,67 @@ export default function AskVacc({navigation}) {
       .unwrap()
       .then((response) => {
         console.log('--------------getting motifs-----------',response)
-        console.log('--------------getting motifs-----------',response.length)
+        for (let i = 0; i < response.length; i++) {
+            const element = response[i];
+            setItems(items => [ ...items, element])
+            }
+
+
       })
       .catch((error) => {
         // ToastAndroid.show(error, ToastAndroid.showWithGravity);
       });
   }, [])
+  const isLoading = useSelector((state) => state.calendar.isLoading);
 
-  return (
-        <WrapElt color={'#55aaff'}>
-            <View style={{flex:1,backgroundColor:'#55aaff',width:'100%'}}>
+
+  const [selectedDate, setSelectedDate] = useState('')
+
+  const onDateChange = (date) => {
+    setSelectedDate(date)
+
+  };
+
+  ///// start mission date  picker
+const [mydate, setMydate] = useState(new Date());
+const [mode, setMode] = useState('date');
+const [show, setShow] = useState(false);
+const changeSelectedDate = (event, selectedDate) => {
+const currentDate = selectedDate || mydate;
+if (Platform.OS === 'android') {
+  setShow(false);
+}
+setMydate(currentDate);
+
+};
+
+const showMode = (currentMode) => {
+setShow(true);
+setMode(currentMode);
+};
+const displayDatepicker = () => {
+showMode('date');
+};
+
+const [valStart, setValStart] = useState(false);
+const [day, setDay] = useState(false);
+
+
+  return (isLoading? 
+    <View style={{flex: 1,
+        justifyContent: "center",
+        flexDirection: "row",
+        justifyContent: "space-around",
+        padding: 10
+        }}>
+        <ActivityIndicator size="large" color="#8cd3ff"/>
+    </View> :
+        <WrapElt color={'#3964bc'}>
+            <View style={{flex:1,backgroundColor:'#3964bc',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
-                backgroundColor:'#55aaff',
+                backgroundColor:'#3964bc',
                 width:30,
                 height:30,
                 padding:4, 
@@ -86,11 +133,14 @@ export default function AskVacc({navigation}) {
                 marginTop:40,
                 flex:1,
                 position:'relative',
-                borderTopRightRadius:  30,
-                borderTopLeftRadius:  30,
+                borderTopRightRadius:  12,
+                borderTopLeftRadius:  12,
+                borderBottomRightRadius:  12,
+                borderBottomLeftRadius:  12,
+                margin:4
                 }]}>
                     <View style={{
-                        backgroundColor:'#f5f5f5',
+                        backgroundColor:'#fff',
                         position:'absolute',
                         top:-14,
                         right:'47%',
@@ -104,55 +154,160 @@ export default function AskVacc({navigation}) {
                         
                   
             <View style={{padding:20,flex:1}}>
-            <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#191970',marginTop:8}} >
+            <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#3964bc',marginTop:8}} >
                     {user.LAN == 'F'?'Demande un congé':'Ask for leave '}
                 </Text>
 
+                <Text style={{fontSize:16,color:'#000',marginTop:20}} >
+                    {user.LAN == 'F'?'Motif :':'Reason :'}
+                </Text>
 
+            <View>
       
-                <View style={{height:'50%',marginTop:20}}>
-                    <View style={{marginTop:20}}>
-                        <DropDownPicker
-                            open={open}
-                            value={value}
-                            items={items}
-                            setOpen={setOpen}
-                            setValue={setValue}
-                            setItems={setItems}
-                            />
+                <FlatList 
+                    horizontal={true} 
+                    data={items} 
+                    renderItem={({item}) => 
+                    <TouchableOpacity
+                        
+                            style={{
+                            backgroundColor:item.SGAB_COU,
+                            padding:2,
+                            margin:8,
+                            height:40,
+                            
+                            alignItems:'center',
+                            justifyContent:'center',
+                            borderRadius:12
+                            }}>
+                            <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{item.SABL_LIB}</Text>  
+                        </TouchableOpacity>
+     
+       
+       
+   
+                } /> 
+                <Text style={{fontSize:16,color:'#000',marginTop:20}} >
+                    {user.LAN == 'F'?`Type d'absence :`:'Reason :'}
+                </Text>
+                <ScrollView horizontal={true}>
+                <TouchableOpacity
+                        
+                        style={{
+                        backgroundColor:'#f5f5f5',
+                        padding:2,
+                        margin:8,
+                        height:40,
+                        
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderRadius:12
+                        }}>
+                        <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{user.LAN == 'F'?'Jour':'Day'}</Text>  
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        
+                        style={{
+                        backgroundColor:'#f5f5f5',
+                        padding:2,
+                        margin:8,
+                        height:40,
+                        
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderRadius:12
+                        }}>
+                        <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{user.LAN == 'F'?'Plusieurs jours':'Several days'}</Text>  
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        
+                        style={{
+                        backgroundColor:'#f5f5f5',
+                        padding:2,
+                        margin:8,
+                        height:40,
+                        
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderRadius:12
+                        }}>
+                        <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{user.LAN == 'F'?'Matin':'Morning'}</Text>  
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        
+                        style={{
+                        backgroundColor:'#f5f5f5',
+                        padding:2,
+                        margin:8,
+                        height:40,
+                        
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderRadius:12
+                        }}>
+                        <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{user.LAN == 'F'?'Aprés-midi':'Afternoon'}</Text>  
+                    </TouchableOpacity>
+                </ScrollView>
+                {day?<View></View>:
+                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
+                    {user.LAN == 'F'?`Choisi le jour :`:'Choose the day :'}
+                </Text>
+                }
+                {valStart?
+                    <View style={{marginTop:20,marginBottom:30}}>
+                      <Text style={{color:'#000'}}>{mydate.toISOString().slice(0,10)}</Text>
                     </View>
-                
-                    <View style={{marginTop:20}}>
-                    <TextInput
-                 //onChangeText={formik.handleChange("reference")}
-                 //value={formik.values.reference}
-                 name="type"
-                 label={'Pourcentage din'}
-                 //onBlur={formik.handleBlur("reference")}
-                 keyboardType="numeric"
-                 //error={formik.errors.reference}
-                 returnKeyType="next"
-              />
+
+                :
+                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
+                    <TouchableOpacity onPress={displayDatepicker} style={{
+                        width:50,
+                        height:30,
+                        padding:2, 
+                        borderRadius:8, 
+                        backgroundColor:'#fff',
+                        alignItems: "center",
+                        marginHorizontal:30,
+                        justifyContent:'center',}}>
+                            <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                    </TouchableOpacity>
+                    <TouchableOpacity  
+                    style={{
+                        width:100,
+                        height:30,
+                        padding:2, 
+                        borderRadius:8, 
+                        backgroundColor:'#00008B',
+                        alignItems: "center",
+                        position:'absolute',
+                        bottom:0,
+                        right:20,
+                        justifyContent:'center',}}>
+                            <Icon name="save" size={18} type='antdesign' color={'#fff'} />
+                    </TouchableOpacity>
                     </View>
-              
+}
 
-                </View>
+                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
+                    {user.LAN == 'F'?`Message réçu :`:'Received message :'}
+                </Text>
+           
 
-
+            </View>
                         <TouchableOpacity  style={{
-                            backgroundColor:'#d67229',
-                            width:120,
-                            height:60,
+                            backgroundColor:'#798571',
+                            width:40,
+                            height:40,
                             padding:4, 
                             borderRadius:10, 
                             alignItems: "center",
                             justifyContent:'center',
                             position:'absolute',
-                            right:20,
-                            bottom:30
+                            right:15,
+                            top:30
                             
                         }} >
-                                <Text style={{color:'#fff',fontWeight:'bold',fontSize:16}}>{user.LAN == 'F'?'Enregistrer':'Save '}</Text>
+                                 <Icon name="send" size={18} color='white' type='feather' ></Icon>
                             </TouchableOpacity>
                  
             </View>
@@ -162,6 +317,21 @@ export default function AskVacc({navigation}) {
              
 
         </View>
+
+        {show ? 
+                  <DateTimePicker
+                     testID="dateTimePicker"
+                     value={mydate}
+                     mode={mode}
+   
+                     display="default"
+                     onChange={changeSelectedDate}
+                     timeZoneOffsetInMinutes={0}
+                     minimumDate={new Date()}
+
+            />:<View></View>
+         }
+
    
     </WrapElt>
   );

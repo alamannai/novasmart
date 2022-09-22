@@ -43,8 +43,8 @@ export const login = createAsyncThunk(
 
 
 
-export const logout = createAsyncThunk("auth/logout", async () => {
-  await AuthService.logout();
+export const logout = createAsyncThunk("auth/logout",  () => {
+   AuthService.logout();
 });
 
 
@@ -91,11 +91,11 @@ const authSlice = createSlice({
         state.error = true
       })
 
-      .addCase(logout.fulfilled, (state) => {
-        state.userInfo = []
-        state.accessToken = ''
-        state.isLoggedIn = false
-      })
+    .addCase(logout.fulfilled, (state) => {
+      state.userInfo = []
+      state.accessToken = ''
+      state.isLoggedIn = false
+    })
 
   }
 

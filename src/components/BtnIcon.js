@@ -3,10 +3,10 @@ import { StyleSheet , TouchableOpacity} from 'react-native'
 
 import { Icon } from '@rneui/themed';
 
-export default function Button() {
+export default function Button({event}) {
   return (
-    <TouchableOpacity style={styles.button}>
-        <Icon name="settings" size={26} type='ionicon' color={'#000'} ></Icon>
+    <TouchableOpacity onPress={event} style={styles.button}>
+        <Icon name="settings" size={22} type='ionicon' color={'#000'} ></Icon>
     </TouchableOpacity>
   )
 }

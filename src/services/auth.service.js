@@ -38,10 +38,10 @@ async function dlt (key) {
 };
 
 
-const logout = async () => {
-  dlt("user");
-  dlt("accessToken");
+const logout = () => {
+  localStorage.removeItem("user");
 };
+
 
 
 const authService = {

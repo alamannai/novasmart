@@ -11,29 +11,12 @@ import HomeScreen from  "../Screens/HomeScreen";
 import PlanningScreen from  "../Screens/PlanningScreen";
 import AskVacc from  "../Screens/AskVacc";
 
-const Drawer = createDrawerNavigator();
 
+const Stack = createNativeStackNavigator();
 
 function Root() {
   return (
-    <Drawer.Navigator initialRouteName="home">
-      <Drawer.Screen name="home" component={HomeScreen} />
-    </Drawer.Navigator>
-  );
-
-}
-
-
-
-export default function MainNavigation () {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
-  const Stack = createNativeStackNavigator();
-
-  return (
-    <NavigationContainer >
-      {isLoggedIn ? (
-        <Stack.Navigator>
+    <Stack.Navigator>
           <Stack.Screen
             name="home"
             component={HomeScreen}
@@ -42,6 +25,25 @@ export default function MainNavigation () {
           <Stack.Screen name="CPH_SAPT" component={PlanningScreen}     options={{ headerShown: false }}  />
           <Stack.Screen name="SPH_SABD" component={AskVacc}     options={{ headerShown: false }}  />
         </Stack.Navigator>
+
+  );
+
+}
+
+
+export default function MainNavigation () {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+  const Drawer = createDrawerNavigator();
+
+  return (
+    <NavigationContainer >
+      {isLoggedIn ? (
+          <Drawer.Navigator initialRouteName="home"  >
+            <Drawer.Screen name="home" component={HomeScreen} options={{ headerShown: false }} />
+            <Drawer.Screen name="CPH_SAPT" component={PlanningScreen}     options={{ headerShown: false }}  />
+            <Drawer.Screen name="SPH_SABD" component={AskVacc}     options={{ headerShown: false }}  />
+          </Drawer.Navigator>
       ) : (
         <AuthNavigator />
       )}

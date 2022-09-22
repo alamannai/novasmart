@@ -16,6 +16,35 @@ import {Calendar, LocaleConfig} from 'react-native-calendars';
 
 
 
+LocaleConfig.locales['F'] = {
+  monthNames: [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre'
+  ],
+  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+  dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+  dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+  today: "Aujourd'hui"
+};
+LocaleConfig.locales['E'] = {
+    monthNames:  ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thurday', 'Friday', 'Saturday'],
+    dayNamesShort: ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    today: "Today"
+  };
+
+
 export default function PlanningScreen({navigation}) {
     
     const dispatch = useDispatch()
@@ -37,7 +66,7 @@ export default function PlanningScreen({navigation}) {
       };
 
       const [typeOfDay, setTypeOfDay] = useState('')
-    
+      LocaleConfig.defaultLocale = user.LAN;  
       
   
   const isLoading = useSelector((state) => state.calendar.isLoading);
@@ -102,6 +131,8 @@ useEffect(() => {
             obj[date]={
                 selected: true, 
                 selectedColor: element.SGAB_COU,
+                dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
+                marked: true,
                 }
         }else{
            
@@ -125,7 +156,8 @@ useEffect(() => {
                     obj[nd]={
                         selected: true, 
                         selectedColor: element.SGAB_COU,
-    
+                        marked: true, 
+                        dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                         }
 
                 }
@@ -159,6 +191,8 @@ useEffect(() => {
             obj[date]={
                 selected: true, 
                 selectedColor: element.SGAB_COU,
+                marked:true,
+                dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                 }
         }else{
            
@@ -182,7 +216,8 @@ useEffect(() => {
                     obj[nd]={
                         selected: true, 
                         selectedColor: element.SGAB_COU,
-    
+                        marked: true, 
+                        dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                         }
 
                 }
@@ -196,12 +231,10 @@ useEffect(() => {
  
 
 
-const [selectedDate, setSelectedDate] = useState([new Date()])
+const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,16))
 
   const onDateChange = (date) => {
-    const pickDate = date.toISOString().slice(0,10).replace('-' ,'').replace('-' ,'')
     setSelectedDate(date)
-    console.log("ff",pickDate)
 
   };
  
@@ -210,12 +243,12 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
   
 
   return (
-        <WrapElt color={'#6EC1E4'}>
-            <View style={{flex:1,backgroundColor:'#6EC1E4',width:'100%'}}>
+        <WrapElt color={'#fff'}>
+            <View style={{flex:1,backgroundColor:'#fff',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
-                backgroundColor:'#6EC1E4',
+                backgroundColor:'#fff',
                 width:30,
                 height:30,
                 padding:4, 
@@ -225,7 +258,7 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
                 position:"absolute",
                 top:16
             }} >
-                <Icon name="left" size={18} color='#fff' type='antdesign' ></Icon>
+                <Icon name="left" size={18} color='#000' type='antdesign' ></Icon>
             </TouchableOpacity>
     
 
@@ -233,7 +266,7 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
                 <View style={{
                     position:'absolute',top:40,left:'45%'
                     }}>
-                    <ActivityIndicator size="large" color="#fff"/>
+                    <ActivityIndicator size="large" color="#3964bc"/>
                 </View> : 
                 <View></View>
             }
@@ -242,23 +275,25 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
             </View>
 <View >
 
-            <View style={{backgroundColor:'#6EC1E4',padding:8,height:'42%',position:'relative'}}>
+            <View style={{backgroundColor:'#fff',height:'42%',position:'relative'}}>
             
             <Calendar 
-
+                firstDay={1}
+            hideExtraDays={true}
                 theme={{
-                    arrowColor: '#fff',
-                    calendarBackground: '#6EC1E4',
-                    monthTextColor: '#fff',
-                    dayTextColor: '#fff',
-                    selectedDayTextColor: '#0e2433',
+                    arrowColor: '#000',
+                    calendarBackground: '#fff',
+                    monthTextColor: '#000',
+                    dayTextColor: '#000',
+                    selectedDayTextColor: 'gray',
                     todayTextColor: 'red',
-                    textSectionTitleColor: '#fff',
+                    textSectionTitleColor: '#000',
+                    selectedDayTextColor: '#000',
                 }}
                 // Collection of dates that have to be marked. Default = {}
                 markedDates={marked}
                 onDayPress={day => {
-                    setSelectedDate(day.dateString)
+                    setSelectedDate(new Date(day.dateString).toString().slice(4,16))
                     console.log('day pressed',selectedDate);
                   }}
 
@@ -323,16 +358,19 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
             
     
             <View style={[styles.elevation,{
-                backgroundColor:'#fff',
+                backgroundColor:'#3964bc',
                 padding:8,
                 marginTop:70,
                 flex:1,
                 position:'relative',
-                borderTopRightRadius:  30,
-                borderTopLeftRadius:  30,
+                borderTopRightRadius:  12,
+                borderTopLeftRadius:  12,
+                borderBottomRightRadius:  12,
+                borderBottomLeftRadius:  12,
+                margin:4
                 }]}>
                     <View style={{
-                        backgroundColor:'#f5f5f5',
+                        backgroundColor:'#3964bc',
                         position:'absolute',
                         top:-14,
                         right:'47%',
@@ -344,14 +382,53 @@ const [selectedDate, setSelectedDate] = useState([new Date()])
                         
                     </View>
                         
-                  
+                    <TouchableOpacity  style={{
+                        backgroundColor:'#3964bc',
+                        width:25,
+                        height:25,
+                        padding:4, 
+                        borderRadius:50, 
+                        alignItems: "center",
+                        justifyContent:'center',
+                        position:"absolute",
+                        top:10,
+                        right:10,
+                        opacity:0.6
+                    }} >
+                        <Icon name="close" size={18} color='#fff' type='antdesign' ></Icon>
+                    </TouchableOpacity>
             <View style={{padding:20,flex:1}}>
 
                 <View style={{height:'50%',marginTop:20}}>
-                    <Text>Selected date : </Text>
-
-
-                   
+                    <Text style={{color:'#fff',fontSize:20,fontWeight:'600'}}>
+                        {user.LAN== 'F' ?'Jour sélectionné'  :'Selected date'}
+                        </Text>
+                        <View style={{
+                            flexDirection:'row',
+                            marginTop:12,
+                            marginLeft:8 ,
+                            backgroundColor:'#fff',
+                            padding:6,
+                            borderRadius:6,
+    
+                        }}>
+                            
+                            <Text style={{color:'#000',marginLeft:10}}>{selectedDate}</Text>
+                        </View>
+                        <Text style={{color:'#fff',fontSize:20,fontWeight:'600',marginTop:10}}>
+                        {user.LAN== 'F' ?'Détails'  :'Details'}
+                        </Text>
+                        <View style={{
+                            flexDirection:'column',
+                            marginTop:12,
+                            marginLeft:8 ,
+                            backgroundColor:'#fff',
+                            padding:6,
+                            borderRadius:6,
+                            justifyContent:'flex-start'
+                        }}>
+                            <Text style={{color:'#000',marginLeft:10}}>work day</Text>
+                        </View>
                 </View>
             </View>
 
