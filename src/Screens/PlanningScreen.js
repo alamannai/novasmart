@@ -395,7 +395,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                         right:10,
                         opacity:0.6
                     }} >
-                        <Icon name="close" size={18} color='#fff' type='antdesign' ></Icon>
+                        <Icon name="right" size={18} color='#fff' type='antdesign' ></Icon>
                     </TouchableOpacity>
             <View style={{padding:20,flex:1}}>
 
@@ -427,7 +427,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                             borderRadius:6,
                             justifyContent:'flex-start'
                         }}>
-                            <Text style={{color:'#000',marginLeft:10}}>work day</Text>
+                            <Text style={{color:'#000',marginLeft:10}}>Journée au travail</Text>
                         </View>
                 </View>
             </View>
