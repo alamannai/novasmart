@@ -31,7 +31,7 @@ export default function ParamScreen({ navigation: { goBack } }) {
                     justifyContent:'center'
                     }}>
    
-                    <Text style={{color:'#fff'}}>Param Screen</Text> 
+                    <Text style={{color:'#fff',marginBottom:10,fontSize:22,fontWeight:'700'}}>Parametres</Text> 
                     <TouchableOpacity onPress={() => goBack()}
                         style={{
                             position:'absolute',
@@ -46,25 +46,94 @@ export default function ParamScreen({ navigation: { goBack } }) {
 
               </TouchableOpacity>
 
-                    <View style={{flexDirection: "column", width:'80%' }}>
+                    <View style={{
+                        flexDirection: "column", 
+                        width:'90%',
+                        borderWidth:1,
+                        borderColor:"gray",
+                        backgroundColor:'#fff',
+                        padding:20,
+                        borderRadius:8 
+                        }}>
                     <View style={{position:'relative'}}>
                     <TextInput
-                        label={'URI'}
+                        label={'https://...'}
+                        returnKeyType="next"
+                        
+
+                    />
+                        <TouchableOpacity
+                            style={{
+                                position:'absolute',
+                                top:20,
+                                right:-8,
+                            padding:2,
+                            margin:8,
+                            height:40,
+                            width:60,
+                            alignItems:'center',
+                            justifyContent:'center',
+                            borderRadius:12,
+                            zIndex:3
+                            }}>
+                                 <Icon name="server" size={18} color={'#000'} type='feather'></Icon>
+                            
+                        </TouchableOpacity>
+
+                <View style={{alignItems:'center',justifyContent:'center'}} >
+{             /*  <Text style={{color:'#fff',alignSelf:'flex-start',margin:20}}>C</Text>*/ }
+                    <TextInput
+                        label={'Langue'}
                         returnKeyType="next"
 
                     />
-                    <View 
-                    style={{
-                        position:'absolute',
-                        right:10,
-                        top:'40%',
-                        height:40,
-                        zIndex:1}}>
-            
+                {/*<ScrollView horizontal={true}>
+                    <TouchableOpacity
+                            style={{
+                            backgroundColor:"#f5f5f5",
+                            padding:2,
+                            margin:8,
+                            height:40,
+                            width:120,
+                            alignItems:'center',
+                            justifyContent:'center',
+                            borderRadius:12
+                            }}>
+                            <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >Anglais</Text>  
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{
+                            backgroundColor:"#f5f5f5",
+                            padding:2,
+                            margin:8,
+                            height:40,
+                            width:120,
+                            alignItems:'center',
+                            justifyContent:'center',
+                            borderRadius:12
+                            }}>
+                            <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >Français</Text>  
+                        </TouchableOpacity>
+                        </ScrollView>*/}
 
 
+                </View>
+
+                
                     </View>
-                    </View>
+                    <TouchableOpacity
+                            style={{
+                            padding:2,
+                            margin:8,
+                            height:40,
+                            alignItems:'center',
+                            justifyContent:'center',
+                            borderRadius:12,
+                            backgroundColor:'gray'
+                            }}>
+                                 <Icon name="reload1" size={16} color={'#fff'} type='antdesign'></Icon>
+                            
+                        </TouchableOpacity>
 
                     </View>
 

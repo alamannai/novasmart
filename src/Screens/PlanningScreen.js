@@ -76,7 +76,6 @@ export default function PlanningScreen({navigation}) {
   const abs = useSelector((state) => state.calendar.Abs);
 
 
-
   const [nyear, setNyear] = useState([])
   const [nyearAbs, setNyearAbs] = useState([])
 
@@ -103,6 +102,33 @@ useEffect(() => {
         // ToastAndroid.show(error, ToastAndroid.showWithGravity);
         });                   
   }, [year])
+  const [dateString, setDateString] = useState("");
+  const [msgDate, setMsgDate] = useState("Jour de travail");
+
+  useEffect(() => { 
+   if(dateString.slice(0,4) == year){
+        for (let i = 0; i < jferState.length; i++) {
+            const element = jferState[i];
+    
+            const sc = element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
+                        element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
+                        element.XSJFEEMP_DATF.toString().slice(6,8)
+
+            if(sc == dateString){
+                setMsgDate(element.XSJFEEMP_LIB);
+               console.log("selected date is vacc",msgDate);
+               break
+            }
+            setMsgDate("Jour de travail");
+        }
+
+        
+        
+        
+    }
+
+  }, [dateString])
+
 
   const marked = useMemo(() => {
     const obj = {}
@@ -235,7 +261,6 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
 
   const onDateChange = (date) => {
     setSelectedDate(date)
-
   };
  
 
@@ -247,7 +272,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
             <View style={{flex:1,backgroundColor:'#fff',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
-            <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
+            <TouchableOpacity onPressOut={() =>handleNavigate('Root')} style={{
                 backgroundColor:'#fff',
                 width:30,
                 height:30,
@@ -286,15 +311,16 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                     monthTextColor: '#000',
                     dayTextColor: '#000',
                     selectedDayTextColor: 'gray',
-                    todayTextColor: 'red',
+                    todayTextColor: 'orange',
                     textSectionTitleColor: '#000',
                     selectedDayTextColor: '#000',
                 }}
                 // Collection of dates that have to be marked. Default = {}
                 markedDates={marked}
                 onDayPress={day => {
-                    setSelectedDate(new Date(day.dateString).toString().slice(4,16))
-                    console.log('day pressed',selectedDate);
+                    setSelectedDate(new Date(day.dateString).toString().slice(4,16));
+                    console.log(day.dateString)
+                    setDateString(day.dateString);
                   }}
 
                   onMonthChange={month => {
@@ -416,18 +442,18 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                             <Text style={{color:'#000',marginLeft:10}}>{selectedDate}</Text>
                         </View>
                         <Text style={{color:'#fff',fontSize:20,fontWeight:'600',marginTop:10}}>
-                        {user.LAN== 'F' ?'Détails'  :'Details'}
+                        {user.LAN== 'F' ?'Description'  :'Description'}
                         </Text>
                         <View style={{
-                            flexDirection:'column',
+                            flexDirection:'row',
                             marginTop:12,
                             marginLeft:8 ,
                             backgroundColor:'#fff',
                             padding:6,
                             borderRadius:6,
-                            justifyContent:'flex-start'
+    
                         }}>
-                            <Text style={{color:'#000',marginLeft:10}}>Journée au travail</Text>
+                            <Text style={{color:'#000',marginLeft:10}}>{msgDate}</Text>
                         </View>
                 </View>
             </View>

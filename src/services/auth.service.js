@@ -40,6 +40,7 @@ async function dlt (key) {
 
 const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("accessToken");
 };
 
 

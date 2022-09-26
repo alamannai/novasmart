@@ -39,8 +39,8 @@ export default function MainNavigation () {
   return (
     <NavigationContainer >
       {isLoggedIn ? (
-          <Drawer.Navigator initialRouteName="home"  >
-            <Drawer.Screen name="home" component={HomeScreen} options={{ headerShown: false }} />
+          <Drawer.Navigator initialRouteName="Root"  >
+            <Drawer.Screen name="Root" component={HomeScreen} options={{ headerShown: false }} />
             <Drawer.Screen name="CPH_SAPT" component={PlanningScreen}     options={{ headerShown: false }}  />
             <Drawer.Screen name="SPH_SABD" component={AskVacc}     options={{ headerShown: false }}  />
           </Drawer.Navigator>

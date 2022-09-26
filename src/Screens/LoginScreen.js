@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import { Icon } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const loginSceenLang = [{
   id:1,
@@ -49,11 +50,6 @@ const loginSceenLang = [{
 }
 ]
 
-
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required().min(4).label("Username"),
-  password: Yup.string().required().min(1).label("Password"),
-});
 
 export default function LoginScreen({ navigation }) {
   const [values, setValues] = useState({});
@@ -91,7 +87,7 @@ export default function LoginScreen({ navigation }) {
         .then((response) => {
           if(response.payload.connecte){
             console.log('---------success login----------')
-            navigation.navigate("home");
+            navigation.navigate("Root");
           }else{
             console.log('status :',response.payload)
             setAlert("Invalid username or password !")
@@ -114,6 +110,7 @@ export default function LoginScreen({ navigation }) {
     const {width, height} = Dimensions.get("window");
     return(
         <Background>
+          
           {alert.length == 0?<View></View> :
           
           <View style={{backgroundColor:'#DC143C',padding:4, borderRadius:8,width:'100%',alignItems:'center'}}>
@@ -229,8 +226,8 @@ export default function LoginScreen({ navigation }) {
       
             
         
-             
- 
+                
+    
         </Background>
     );
 }

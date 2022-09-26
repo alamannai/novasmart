@@ -6,7 +6,7 @@ import { Icon } from '@rneui/themed';
 export default function Button({event}) {
   return (
     <TouchableOpacity onPress={event} style={styles.button}>
-        <Icon name="settings" size={22} type='ionicon' color={'#000'} ></Icon>
+        <Icon name="ios-settings-outline" size={22} type='ionicon' color={'#000'} ></Icon>
     </TouchableOpacity>
   )
 }

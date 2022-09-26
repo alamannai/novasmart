@@ -10,10 +10,10 @@ import TextInput from '../components/TextInput'
 import { string } from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getMotifAbs } from '../features/calendarSlice';
-
+import * as Yup from "yup";
 import FormAdd from '../components/FormAdd';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import { useFormik } from "formik";
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import Autocomplete from 'react-native-autocomplete-input';
 
@@ -24,7 +24,10 @@ export default function AskVacc({navigation}) {
 
 
     const handleNavigate = (name) => {
-
+        setDay(true);
+        setMday(true);
+        setMn(true);
+        setAf(true);
         navigation.navigate(name)
       };
 
@@ -201,6 +204,7 @@ const showDay = (id) => {
                 
             }
             setFilteredItems(tabs);
+            setMotifId('')
           } else {
             // If the query is null then return blank
             setFilteredItems([]);
@@ -210,6 +214,80 @@ const showDay = (id) => {
       const [val, setVal] = useState('');
 
 
+      ///// start vacc time  picker
+        const [mydatetime, setMydatetime] = useState(new Date());
+        const [modetime, setModetime] = useState('date');
+        const [showtime, setShowtime] = useState(false);
+        const changeSelectedDatetime = (event, selectedDatetime) => {
+        const currentDatetime = selectedDatetime || mydatetime;
+        if (Platform.OS === 'android') {
+        setShowtime(false);
+        }
+        setMydatetime(currentDatetime);
+
+        };
+
+        const showModetime = (currentModetime) => {
+        setShowtime(true);
+        setModetime(currentModetime);
+        };
+        const displayDatepickertime = () => {
+        showModetime('time');
+        };
+
+        ///// end vacc timeend  picker
+            const [mydatetimeend, setMydatetimeend] = useState(new Date());
+            const [modetimeend, setModetimeend] = useState('date');
+            const [showtimeend, setShowtimeend] = useState(false);
+            const changeSelectedDatetimeend = (event, selectedDatetimeend) => {
+            const currentDatetimeend = selectedDatetimeend || mydatetimeend;
+            if (Platform.OS === 'android') {
+            setShowtimeend(false);
+            }
+            setMydatetimeend(currentDatetimeend);
+
+            };
+
+            const showModetimeend = (currentModetimeend) => {
+            setShowtimeend(true);
+            setModetimeend(currentModetimeend);
+            };
+            const displayDatepickertimeend = () => {
+            showModetimeend('time');
+            };
+
+
+            const validationSchema = Yup.object().shape({
+                motif: Yup.string().required("Required"),
+                type: Yup.string().required("Password Required"),
+                startDate: Yup.date().required("required"),
+                endDate: Yup.date().required("required"),
+              });
+              
+              const formik = useFormik({
+                initialValues: {
+                    motif: "",
+                    type: "",
+                    startDate: "",
+                    endDate: "",
+                },
+                validateOnChange: false,
+                validationSchema,
+                onSubmit: () => {
+                  handleSub();
+                },
+              });
+
+              const [motifId, setMotifId] = useState('');
+
+              const chooseMotif = (id) => {  
+
+                setMotifId(id);
+                formik.setFieldValue("motif",id)
+            
+              
+            };
+            
   return (isLoading? 
     <View style={{flex: 1,
         justifyContent: "center",
@@ -223,7 +301,7 @@ const showDay = (id) => {
             <View style={{flex:1,backgroundColor:'#3964bc',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
-            <TouchableOpacity onPressOut={() =>handleNavigate('home')} style={{
+            <TouchableOpacity onPressOut={() =>handleNavigate('Root')} style={{
                 backgroundColor:'#3964bc',
                 width:30,
                 height:30,
@@ -274,22 +352,22 @@ const showDay = (id) => {
             <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#0000b0',marginTop:8}} >
                     {user.LAN == 'F'?'Demande un congé':'Ask for leave '}
                 </Text>
-
-                <Text style={{fontSize:16,color:'#000',marginTop:20}} >
+                <ScrollView>
+                <Text style={{fontSize:16,color:'#000',marginTop:16}} >
                     {user.LAN == 'F'?'Motif :':'Reason :'}
                 </Text>
 
-            <ScrollView>
+    
   
 
 
-<View style={styles.container}>
+                <View style={styles.container}>
                     <TextInput
                         onChangeText={(text) => findItem(text)}
                        />
 
                 <TouchableOpacity
-                      
+                 
                         style={{
                         backgroundColor:"gray",
                         padding:2,
@@ -314,9 +392,9 @@ const showDay = (id) => {
                     data={filteredItems} 
                     renderItem={({item}) => 
                     <TouchableOpacity
-                        
+                    onPress={() => chooseMotif(item.SABS_COD)}
                             style={{
-                            backgroundColor:"#f5f5f5",
+                            backgroundColor:motifId == item.SABS_COD?"#0000b0" :"#f5f5f5",
                             padding:2,
                             margin:8,
                             height:40,
@@ -325,14 +403,14 @@ const showDay = (id) => {
                             justifyContent:'center',
                             borderRadius:12
                             }}>
-                            <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{item.SABL_LIB}</Text>  
+                            <Text style={{paddingHorizontal:8,color:motifId == item.SABS_COD?"#fff" :"#1c1c1c"}} >{item.SABL_LIB}</Text>  
                         </TouchableOpacity>
      
        
        
    
                 } />
-
+                {filteredItems.length == 0 ? <Text style={{color:'red',fontSize:12}}>{user.LAN =="F" ?"Cherche un motif ":""}</Text>:<View></View>}
                 <Text style={{fontSize:16,color:'#000',marginTop:20}} >
                     {user.LAN == 'F'?`Type d'absence :`:'Reason :'}
                 </Text>
@@ -460,15 +538,135 @@ const showDay = (id) => {
                 </View>
                 </View>
                 }
+                {/** Form morning */}
+                {mn?<View></View>:
+                <View>
+                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
+                    {user.LAN == 'F'?`Matin :`:'Morning :'}
+                </Text>
+                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
+                <TouchableOpacity onPress={displayDatepicker} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={displayDatepickertime} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={displayDatepickertime} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                </TouchableOpacity>
+               
+                </View>
+                <TouchableOpacity  
+                style={{
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#00008B',
+                    alignItems: "center",
+                    marginTop:16,
+                    justifyContent:'center',}}>
+                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
+                </TouchableOpacity>
+                </View>
+                }
+                {/** Form afternoon */}
+                {af?<View></View>:
+                <View>
+                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
+                    {user.LAN == 'F'?`Aprés-midi :`:'The Afternoon :'}
+                </Text>
+                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
+                <TouchableOpacity onPress={displayDatepicker} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                </TouchableOpacity>
+                
+                <TouchableOpacity onPress={displayDatepickertime} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={displayDatepickertime} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                </TouchableOpacity>
+                
+                </View>
+                <TouchableOpacity  
+                style={{
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#00008B',
+                    marginTop:16,
+                    alignItems: "center",
+                    justifyContent:'center',}}>
+                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
+                </TouchableOpacity>
+                </View>
+                }
               
                   {/*  <View style={{marginTop:20,marginBottom:30}}>
                       <Text style={{color:'#000'}}>{mydate.toISOString().slice(0,10)}</Text>
                     </View>*/
 }
+                
                 <View >
+                <View style={{backgroundColor:"gray", height:1,marginTop:30,opacity:0.2}}>
+                    {/*  Separation */}
+                </View>
                     <Text style={{fontSize:16,color:'#000',marginTop:40}} >
                         {user.LAN == 'F'?`Message réçu :`:'Received message :'}
                     </Text>
+                    <TextInput
+                        label={'Reponse du server'}
+                       />
+
                 </View>
 
                 
@@ -485,7 +683,7 @@ const showDay = (id) => {
                             justifyContent:'center',
                             position:'absolute',
                             right:15,
-                            top:30
+                            top:10
                             
                         }} >
                                  <Icon name="send" size={18} color='white' type='feather' ></Icon>
@@ -540,6 +738,33 @@ const showDay = (id) => {
 
             />:<View></View>
          }
+
+        {showtime? 
+                  <DateTimePicker
+                     testID="dateTimePickertime"
+                     value={mydatetime}
+                     mode={modetime}
+
+                     display="default"
+                     onChange={changeSelectedDatetime}
+                     timeZoneOffsetInMinutes={0}
+            />:<View></View>
+         }
+
+        {showtimeend? 
+                  <DateTimePicker
+                     testID="dateTimePickertimeend"
+                     value={mydatetimeend}
+                     mode={modetimeend}
+
+                     display="default"
+                     onChange={changeSelectedDatetimeend}
+                     timeZoneOffsetInMinutes={0}
+       
+
+            />:<View></View>
+         }
+
    
     </WrapElt>
   );
