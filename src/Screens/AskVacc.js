@@ -16,7 +16,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useFormik } from "formik";
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import Autocomplete from 'react-native-autocomplete-input';
-
+import  Dropdown  from 'react-native-element-dropdown';
 export default function AskVacc({navigation}) {
     const dispatch = useDispatch()
 
@@ -32,7 +32,7 @@ export default function AskVacc({navigation}) {
       };
 
 
-      const typeA = [
+      const [typeA,setTypeA] =useState ([
         {
             id: "dy",
             label : user.LAN == 'F'?'Jour':'Day'},
@@ -45,15 +45,14 @@ export default function AskVacc({navigation}) {
         {
             id: "af",
             label : user.LAN == 'F'?'Aprés-midi':'Afternoon'},
-        ]
+        ])
 
       const [daysFree, setDaysFree] = useState([])
       
   const jfer = useSelector((state) => state.calendar.Jfer);
-
-
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
   const [items, setItems] = useState([
   ]);
 
@@ -74,6 +73,10 @@ export default function AskVacc({navigation}) {
         // ToastAndroid.show(error, ToastAndroid.showWithGravity);
       });
   }, [])
+
+
+
+
   const isLoading = useSelector((state) => state.calendar.isLoading);
 
 
@@ -153,7 +156,7 @@ showMode('date');
 
 const [valStart, setValStart] = useState(false);
 const [day, setDay] = useState(true);
-const [mday, setMday] = useState(true);
+const [mday, setMday] = useState(false);
 
 const [mn, setMn] = useState(true);
 const [af, setAf] = useState(true);
@@ -297,12 +300,12 @@ const showDay = (id) => {
         }}>
         <ActivityIndicator size="large" color="#8cd3ff"/>
     </View> :
-        <WrapElt color={'#3964bc'}>
-            <View style={{flex:1,backgroundColor:'#3964bc',width:'100%'}}>
+        <WrapElt color={'#00adef'}>
+            <View style={{flex:1,backgroundColor:'#00adef',width:'100%',}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('Root')} style={{
-                backgroundColor:'#3964bc',
+                backgroundColor:'#00adef',
                 width:30,
                 height:30,
                 padding:4, 
@@ -325,14 +328,13 @@ const showDay = (id) => {
             <View style={[styles.elevation,{
                 backgroundColor:'#fff',
                 padding:8,
-                marginTop:40,
+                marginTop:'20%',
                 flex:1,
                 position:'relative',
                 borderTopRightRadius:  12,
                 borderTopLeftRadius:  12,
-                borderBottomRightRadius:  12,
-                borderBottomLeftRadius:  12,
-                margin:4
+                //borderBottomRightRadius:  12,
+                //borderBottomLeftRadius:  12,
                 }]}>
                     <View style={{
                         backgroundColor:'#fff',
@@ -342,14 +344,14 @@ const showDay = (id) => {
                         height:7,
                         width:'10%',
                         borderRadius:8,
-                        opacity:0.4
+                        opacity:0.6
                         }}>
                         
                     </View>
                         
                   
             <View style={{padding:20,flex:1}}>
-            <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#0000b0',marginTop:8}} >
+            <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#3964bc',marginTop:8,marginBottom:20}} >
                     {user.LAN == 'F'?'Demande un congé':'Ask for leave '}
                 </Text>
                 <ScrollView>
@@ -366,7 +368,7 @@ const showDay = (id) => {
                         onChangeText={(text) => findItem(text)}
                        />
 
-                <TouchableOpacity
+                    <TouchableOpacity
                  
                         style={{
                         backgroundColor:"gray",
@@ -410,12 +412,12 @@ const showDay = (id) => {
        
    
                 } />
-                {filteredItems.length == 0 ? <Text style={{color:'red',fontSize:12}}>{user.LAN =="F" ?"Cherche un motif ":""}</Text>:<View></View>}
+                {/*{filteredItems.length == 0 ? <Text style={{color:'red',fontSize:12}}>{user.LAN =="F" ?"Cherche un motif ":""}</Text>:<View></View>}
                 <Text style={{fontSize:16,color:'#000',marginTop:20}} >
                     {user.LAN == 'F'?`Type d'absence :`:'Reason :'}
                 </Text>
 
-                <FlatList 
+              <FlatList 
                     horizontal={true} 
                     data={typeA} 
                     renderItem={({item}) => 
@@ -434,10 +436,21 @@ const showDay = (id) => {
                             <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{item.label}</Text>  
                         </TouchableOpacity>
      
-       
-       
    
-                } /> 
+                } />*/}
+                {/*<View style={{marginTop:20}}>
+                <DropDownPicker
+                                open={open}
+                                value={value}
+                                items={typeA}
+                                setOpen={setOpen}
+                                setValue={setValue}
+                                setItems={setTypeA}
+
+                                />
+                </View>*/}
+
+                           
 {/** Form 1 day */}
                 {day?<View></View>:
                 <View>
@@ -474,7 +487,7 @@ const showDay = (id) => {
                 </View>
                 }
 {/** Form several days */}
-            {mday?<View></View>:
+            {//mday?<View></View>:
                 <View>
                 <Text style={{fontSize:16,color:'#000',marginTop:40}} >
                     {user.LAN == 'F'?`De :`:'From :'}
@@ -490,6 +503,17 @@ const showDay = (id) => {
                     marginHorizontal:30,
                     justifyContent:'center',}}>
                         <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={displayDatepickertime} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
                 </TouchableOpacity>
                 <TouchableOpacity  
                 style={{
@@ -520,6 +544,17 @@ const showDay = (id) => {
                     marginHorizontal:30,
                     justifyContent:'center',}}>
                         <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={displayDatepickertime} style={{
+                    width:50,
+                    height:30,
+                    padding:2, 
+                    borderRadius:8, 
+                    backgroundColor:'#fff',
+                    alignItems: "center",
+                    marginHorizontal:30,
+                    justifyContent:'center',}}>
+                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
                 </TouchableOpacity>
                 <TouchableOpacity  
                 style={{
@@ -649,16 +684,24 @@ const showDay = (id) => {
                         <Icon name="save" size={18} type='antdesign' color={'#fff'} />
                 </TouchableOpacity>
                 </View>
+                
                 }
+                 {/*<View style={[styles.container,{marginTop:20}]}>
+                    <TextInput
+                        label={'Commentaire ...'}
+                       />
+
+
+            </View>*/}
               
                   {/*  <View style={{marginTop:20,marginBottom:30}}>
                       <Text style={{color:'#000'}}>{mydate.toISOString().slice(0,10)}</Text>
                     </View>*/
 }
                 
-                <View >
-                <View style={{backgroundColor:"gray", height:1,marginTop:30,opacity:0.2}}>
-                    {/*  Separation */}
+              { /* <View >
+              <View style={{backgroundColor:"gray", height:1,marginTop:30,opacity:0.2}}>
+                    
                 </View>
                     <Text style={{fontSize:16,color:'#000',marginTop:40}} >
                         {user.LAN == 'F'?`Message réçu :`:'Received message :'}
@@ -667,7 +710,7 @@ const showDay = (id) => {
                         label={'Reponse du server'}
                        />
 
-                </View>
+                </View>*/}
 
                 
            

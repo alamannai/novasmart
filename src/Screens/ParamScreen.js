@@ -21,11 +21,11 @@ import { Pressable } from 'react-native';
 export default function ParamScreen({ navigation: { goBack } }) {
 
     return(
-        <WrapElt color={'#3964bc'}>
+        <WrapElt color={'#00adef'}>
                 <View style={{
                     flex:1,
                     width:'100%',
-                    backgroundColor:'#3964bc',
+                    backgroundColor:'#00adef',
                     position:'relative',
                     alignItems:'center',
                     justifyContent:'center'
@@ -49,8 +49,7 @@ export default function ParamScreen({ navigation: { goBack } }) {
                     <View style={{
                         flexDirection: "column", 
                         width:'90%',
-                        borderWidth:1,
-                        borderColor:"gray",
+
                         backgroundColor:'#fff',
                         padding:20,
                         borderRadius:8 
@@ -129,7 +128,7 @@ export default function ParamScreen({ navigation: { goBack } }) {
                             alignItems:'center',
                             justifyContent:'center',
                             borderRadius:12,
-                            backgroundColor:'gray'
+                            backgroundColor:'#3964bc'
                             }}>
                                  <Icon name="reload1" size={16} color={'#fff'} type='antdesign'></Icon>
                             

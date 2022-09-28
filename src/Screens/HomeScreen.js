@@ -1,10 +1,10 @@
-import { StyleSheet, Animated, ActivityIndicator, Text, View, FlatList, TouchableOpacity , Image, SafeAreaView} from 'react-native';
+import { StyleSheet, Animated, ActivityIndicator,TextInput, Text, View, FlatList, TouchableOpacity , Image, SafeAreaView} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState, useEffect, useRef } from 'react';
 import {  getMenu } from '../features/menuSlice';
-
+import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
 import { string } from 'yup';
@@ -12,8 +12,8 @@ import { getFer, getAbs } from '../features/calendarSlice';
 import { logout } from '../features/authSlice';
 import { Avatar } from "@rneui/themed";
 import { ScrollView } from 'react-native-gesture-handler';
-
 import {StackActions} from '@react-navigation/native';
+import { Pressable } from 'react-native';
 
 export default function HomeScreen({navigation}) {
 
@@ -21,6 +21,14 @@ export default function HomeScreen({navigation}) {
 
     const user = useSelector((state) => state.auth.userInfo);
     const menu = useSelector((state) => state.menu.menu);
+
+    const icons =[ 
+      { id : "1",label :"", color:""},
+      { id : "2",label :"", color:""},
+      { id : "3",label :"", color:""},
+      { id : "4",label :"", color:""},
+      { id : "5",label :"", color:""},
+    ]
 
     
     const getIconName = (id) => {
@@ -123,7 +131,7 @@ export default function HomeScreen({navigation}) {
         <ActivityIndicator size="large" color="#8cd3ff"/>
     </View> :
     
-        <WrapElt color={'#fafafa'}>
+        <WrapElt color={'#f5f5f5'}>
 
 {/*
 <SafeAreaView style={{ 
@@ -236,7 +244,7 @@ export default function HomeScreen({navigation}) {
                     </Text>
 
 
-          
+        
 
         </Animated.View>
 
@@ -246,14 +254,17 @@ export default function HomeScreen({navigation}) {
       </SafeAreaView>*/}
 
 
-           <View style={{
+           <View style={styles.elevation,{
                 height:'20%',
                 width:'100%',
-                backgroundColor:'#fafafa',
+                backgroundColor:'#f5f5f5',
                 justifyContent:'center',
                 position:'relative',
+                //borderBottomRightRadius:  30,
+                //borderBottomLeftRadius:  30,
+                paddingBottom:12
                 }}>
-                    <View style={{flexDirection:'row' ,alignItems:'center',marginLeft:'5%',marginTop:'10%'}}>
+                    <View style={{flexDirection:'row' ,alignItems:'center',marginLeft:'5%' ,marginTop:'10%'}}>
                     <Text style={{fontSize:22,fontWeight:'300',color:'#1c1c1c'}} >
                         {user.LAN == 'F'?'Bonjour,  ':'Hello,  '}
                         </Text>
@@ -261,25 +272,29 @@ export default function HomeScreen({navigation}) {
                         {user.SCIV_PRE}
                     </Text>
                     </View>
-                    <Text style={{fontSize:14,fontWeight:'400',color:'1c1c1c',opacity:0.2,marginLeft:'5%',marginTop:10}}>
+                    <Text style={{fontSize:14,fontWeight:'400',color:'#1c1c1c',opacity:0.4,marginLeft:'5%',marginTop:10}}>
                     {user.LAN == 'F'?'Bonne Journée .':'Have a nice day .'}
                     </Text>
 
+                  <View></View>
+                   
+
             <TouchableOpacity onPress={out}
-             style={{
-                        backgroundColor:'#fafafa',
-                        height:30,
-                        width:30,           
+             style={[styles.elevation,{
+                        backgroundColor:'#00adef',
+                        height:40,
+                        width:60,           
                         alignItems:'center',
                         justifyContent:'center',
                         position:'absolute',
                         right:20,
-                        top:20
-                        }}>
-                        <Icon name="logout" size={20} color={'#000'} type='antdesign'></Icon>
+                        bottom:30,
+                        borderRadius:12
+                        }]}>
+                        <Icon name="logout" size={20} color={'#fff'} type='antdesign'></Icon>
                        
                     </TouchableOpacity>
-                 <TouchableOpacity onPress={() => navigation.openDrawer()}
+            {/*     <TouchableOpacity onPress={() => navigation.openDrawer()}
                    style={{
                         backgroundColor:'#fafafa',
                         height:30,
@@ -291,14 +306,93 @@ export default function HomeScreen({navigation}) {
                         top:20
                         }}>
                         <Icon name="md-menu-outline" size={20} color={'#000'} type='ionicon'></Icon>
-                    </TouchableOpacity>
+                      </TouchableOpacity>*/}
 
 
             </View>
 
+   <FlatList  style={{backgroundColor:'#f5f5f5',width:'100%'}} 
+        data={menu} 
+        //numColumns={2}
+        renderItem={({item}) =>  
+
+        <View
+
+      key={item.ZMOD_ID} style={[styles.elevation,{
+            position:'relative',
+            marginTop:16,
+            margin:8,
+            height:120, //height:180,
+            width:'90%',//width:'45%',
+            alignSelf:'center',
+            borderRadius:12,
+            backgroundColor:'#fff',
+            }]}>
 
 
-        <FlatList  style={{backgroundColor:'#fafafa',flex:1}} horizontal={true}
+              <View style={{
+                  alignItems:'center',
+                  position:'absolute',
+                  bottom:33,
+                  left:'8%',
+                  justifyContent:'center',
+                  backgroundColor:'#00adef',
+                  borderRadius:50,
+                  padding:12
+                 
+                  }} >
+                  {item.ZMOD_ID == "CPH_SAPT"? <Icon name="calendar" size={26} color={'#fff'} type='ionicon'></Icon>:
+                  item.ZMOD_ID == "SPH_SABD"?
+                  <Icon name="note-add" size={26} color={'#fff'} type='materialicon'></Icon>:
+                  item.ZMOD_ID == "SPH_SAPT"?
+                  <Icon name="time" size={26} color={'#fff'} type='ionicon'></Icon>:
+                  item.ZMOD_ID == "CPH_SDOC"?
+                  <Icon name="ios-documents" size={26} color={'#fff'} type='ionicon'></Icon>:
+                  item.ZMOD_ID == "SPH_SDOC"?
+                  <Icon name="pencil-outline" size={26} color={'#fff'} type='ionicon'></Icon>:
+                  <Icon name="rectangle" size={26} color={'#fff'} type='fantisto'></Icon>}
+                
+                </View>
+                <View style={{
+                  position:'absolute', 
+                  bottom:30,
+                  left:'25%',
+                  height:60,
+                  width:'80%',
+                  borderRadius:12,
+                  alignItems:'flex-start',
+                  justifyContent:'center',
+                  padding:4
+                  }}>
+                <Text style={{margin:2,color:'#1c1c1c', opacity:0.8,fontSize:14,fontWeight:'700',}}>
+                                            {item.ZMOD_DES}
+                    </Text>
+                    </View>
+             
+                
+                            
+  
+                
+              <TouchableOpacity onPressOut={() =>handleNavigate(item.ZMOD_ID)}   style={{
+
+            marginLeft:30,
+            height:30,
+            position:'absolute',
+            bottom:43,
+            right:'5%',
+            alignItems:'center',
+            justifyContent:'center',
+            borderRadius:8
+            }}>
+
+            <Icon name="chevron-right" size={24} color={'#1c1c1c'} type='entypo'></Icon>
+          </TouchableOpacity>
+        </View>
+    } 
+  />
+
+
+{    /*    <FlatList  style={{backgroundColor:'#fafafa',flex:1}} horizontal={true}
         data={menu} 
         renderItem={({item}) =>  
         <View style={[styles.elevation,{
@@ -343,8 +437,8 @@ export default function HomeScreen({navigation}) {
          
         </View>
     } 
-        />
-        <View style={{backgroundColor:'#fafafa',flex:1,width:'100%',padding:16}}>
+  />*/}
+{  /*      <View style={{backgroundColor:'#fafafa',flex:1,width:'100%',padding:16}}>
             <View style={{height:'15%'}}>
             <Text style={{fontWeight:'700'}}>Event</Text>
             </View>
@@ -406,7 +500,7 @@ export default function HomeScreen({navigation}) {
                 <View style={{height:20}}></View>
                 </ScrollView>
 
-        </View>
+        </View>*/}
     </WrapElt>
   );
 }
@@ -484,8 +578,8 @@ const styles = StyleSheet.create({
         top:16
     }   ,  
     elevation: {
-        elevation: 4,
-        shadowColor: '#999999',
+        elevation: 6,
+        shadowColor: 'gray',
         shadowOpacity:0.2,
         shadowOffset: { width: 0, height: 0 },
 

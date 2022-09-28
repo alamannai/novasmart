@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Avatar } from "@rneui/themed";
-
+import WrapElt from '../components/WrapElt';
 import { Icon } from '@rneui/themed';
 import UpdatePass from '../components/UpdatePass';
+import { useDispatch ,useSelector } from "react-redux";
+import { logout } from '../features/authSlice';
+
 
 const userDetails= {
     username: 'John123',
@@ -13,8 +16,16 @@ const userDetails= {
 }
 
  export default function SettingsScreen() {
+  
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.auth.userInfo);
+  function out() {
+    console.log("logout")
+    dispatch(logout())
+    console.log('user data',user)
+  };
     return (
-    <SafeAreaView style={{backgroundColor:'#FAFAFA',flex:1}}>
+    <WrapElt style={{backgroundColor:'#FAFAFA'}}>
         <View style={styles.profileSection}>
             <View style={styles.profilePic}>
                 <Avatar
@@ -35,7 +46,7 @@ const userDetails= {
                     marginLeft:10,
                     marginBottom:6
                     }}>
-                    {userDetails.FullName}
+                    {user.SCIV_PRE}
                 </Text>
                 <Text style={styles.innerText}> {userDetails.mail}</Text>
                 <TouchableOpacity style={{
@@ -159,7 +170,7 @@ const userDetails= {
             <Text style={[styles.headingText]}>
               Logout
             </Text>
-            <TouchableOpacity style={{position:'absolute', right:0 ,padding:4}}>
+            <TouchableOpacity onPress={out} style={{position:'absolute', right:0 ,padding:4}}>
                 <Icon name="logout" size={16} type='antdesign' ></Icon>
             </TouchableOpacity>
           </View>
@@ -168,7 +179,7 @@ const userDetails= {
       </ScrollView>
 
         
-    </SafeAreaView>
+    </WrapElt>
     
     );
   }
@@ -182,6 +193,7 @@ const userDetails= {
     card: {
       position:'relative',
         backgroundColor: 'white',
+        width:'90%',
         paddingVertical: 35,
         borderRadius:4,
         paddingHorizontal: 25,
@@ -189,8 +201,8 @@ const userDetails= {
         marginTop:24
       },
       elevation: {
-        elevation: 20,
-        shadowColor: '#52006A',
+        elevation: 6,
+        shadowColor: 'gray',
       },
     profileSection:{
         flexDirection:'row',

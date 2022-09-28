@@ -78,7 +78,7 @@ export default function PlanningScreen({navigation}) {
 
   const [nyear, setNyear] = useState([])
   const [nyearAbs, setNyearAbs] = useState([])
-
+  
   useEffect(() => { 
     dispatch(getFer(year))
         .unwrap()
@@ -104,11 +104,11 @@ useEffect(() => {
   }, [year])
   const [dateString, setDateString] = useState("");
   const [msgDate, setMsgDate] = useState("Jour de travail");
-
+  const [changed, setChanged] = useState(true)
   useEffect(() => { 
-   if(dateString.slice(0,4) == year){
-        for (let i = 0; i < jferState.length; i++) {
-            const element = jferState[i];
+
+        for (let i = 0; i < jfer.length; i++) {
+            const element = jfer[i];
     
             const sc = element.XSJFEEMP_DATF.toString().slice(0,4)+ '-'+
                         element.XSJFEEMP_DATF.toString().slice(4,6)+ '-'+
@@ -116,16 +116,68 @@ useEffect(() => {
 
             if(sc == dateString){
                 setMsgDate(element.XSJFEEMP_LIB);
+     
                console.log("selected date is vacc",msgDate);
                break
             }
-            setMsgDate("Jour de travail");
+            
         }
 
+        for (let i = 0; i < abs.length; i++) {
+            const element = abs[i];
+            if (element.SABDN_DATV === element.SABDN_FINV){
+                const date = 
+                    element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                    element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                    element.SABDN_DATV.toString().slice(6,8)
+                    
+                    if(date == dateString){
+                        setMsgDate(element.SABL_LIB);
+           
+                       console.log("selected date is vacc",msgDate);
+                       break
+                    }
+                 
+            }else{
+               
+                    const d =   element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                                element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                                element.SABDN_DATV.toString().slice(6,8)
+    
+                    const f =   element.SABDN_FINV.toString().slice(0,4)+ '-'+
+                                element.SABDN_FINV.toString().slice(4,6)+ '-'+
+                                element.SABDN_FINV.toString().slice(6,8)
+                    
+                    const dd = parseInt(element.SABDN_DATV.toString().slice(6,8)) 
+                    const ff = parseInt(element.SABDN_FINV.toString().slice(6,8)) 
+                    
+                    for(let i=0; i< ff-dd +1; i++){
+                        const nd =  
+                            element.SABDN_DATV.toString().slice(0,4)+ '-'+
+                            element.SABDN_DATV.toString().slice(4,6)+ '-'+
+                            String(dd+i)
+                    
+                            if(nd == dateString){
+                                setMsgDate(element.SABL_LIB);
+                             
+                               console.log("selected date is vacc",msgDate);
+                               break
+                            }
+                      
+    
+                    }
+    
+    
+                    }
+        }
+
+
+
+
+  
         
         
-        
-    }
+    
 
   }, [dateString])
 
@@ -159,6 +211,7 @@ useEffect(() => {
                 selectedColor: element.SGAB_COU,
                 dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                 marked: true,
+                
                 }
         }else{
            
@@ -203,6 +256,7 @@ useEffect(() => {
         obj[sc]={
             selected: true, 
             selectedColor: element.XSJFEEMP_COU,
+
           }
     }
     // curr year abs
@@ -216,7 +270,7 @@ useEffect(() => {
                 
             obj[date]={
                 selected: true, 
-                selectedColor: element.SGAB_COU,
+                selectedColor:  '#FAF884',//element.SGAB_COU,
                 marked:true,
                 dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                 }
@@ -241,7 +295,7 @@ useEffect(() => {
                 
                     obj[nd]={
                         selected: true, 
-                        selectedColor: element.SGAB_COU,
+                        selectedColor: '#FAF884',//element.SGAB_COU,
                         marked: true, 
                         dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                         }
@@ -257,7 +311,7 @@ useEffect(() => {
  
 
 
-const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,16))
+const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0,10))
 
   const onDateChange = (date) => {
     setSelectedDate(date)
@@ -268,12 +322,12 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
   
 
   return (
-        <WrapElt color={'#fff'}>
-            <View style={{flex:1,backgroundColor:'#fff',width:'100%'}}>
+        <WrapElt color={'#00adef'}>
+            <View style={{flex:1,backgroundColor:'#00adef',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('Root')} style={{
-                backgroundColor:'#fff',
+                backgroundColor:'#00adef',
                 width:30,
                 height:30,
                 padding:4, 
@@ -283,7 +337,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                 position:"absolute",
                 top:16
             }} >
-                <Icon name="left" size={18} color='#000' type='antdesign' ></Icon>
+                <Icon name="left" size={18} color='#fff' type='antdesign' ></Icon>
             </TouchableOpacity>
     
 
@@ -300,25 +354,25 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
             </View>
 <View >
 
-            <View style={{backgroundColor:'#fff',height:'42%',position:'relative'}}>
+            <View style={{backgroundColor:'#00adef',height:'43%',position:'relative'}}>
             
             <Calendar 
                 firstDay={1}
             hideExtraDays={true}
                 theme={{
-                    arrowColor: '#000',
-                    calendarBackground: '#fff',
-                    monthTextColor: '#000',
-                    dayTextColor: '#000',
+                    arrowColor: '#fff',
+                    calendarBackground: '#00adef',
+                    monthTextColor: '#fff',
+                    dayTextColor: '#fff',
                     selectedDayTextColor: 'gray',
-                    todayTextColor: 'orange',
-                    textSectionTitleColor: '#000',
+                    todayTextColor: 'red',
+                    textSectionTitleColor: '#fff',
                     selectedDayTextColor: '#000',
                 }}
                 // Collection of dates that have to be marked. Default = {}
                 markedDates={marked}
                 onDayPress={day => {
-                    setSelectedDate(new Date(day.dateString).toString().slice(4,16));
+                    setSelectedDate(new Date(day.dateString).toISOString().slice(0,10));
                     console.log(day.dateString)
                     setDateString(day.dateString);
                   }}
@@ -384,9 +438,9 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
             
     
             <View style={[styles.elevation,{
-                backgroundColor:'#3964bc',
+                backgroundColor:'#fff',
                 padding:8,
-                marginTop:70,
+                marginTop:80,
                 flex:1,
                 position:'relative',
                 borderTopRightRadius:  12,
@@ -396,7 +450,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                 margin:4
                 }]}>
                     <View style={{
-                        backgroundColor:'#3964bc',
+                        backgroundColor:'#fff',
                         position:'absolute',
                         top:-14,
                         right:'47%',
@@ -409,53 +463,52 @@ const [selectedDate, setSelectedDate] = useState(new Date().toString().slice(4,1
                     </View>
                         
                     <TouchableOpacity  style={{
-                        backgroundColor:'#3964bc',
+                        backgroundColor:'#00adef',
                         width:25,
                         height:25,
                         padding:4, 
-                        borderRadius:50, 
+                        borderRadius:4, 
                         alignItems: "center",
                         justifyContent:'center',
                         position:"absolute",
-                        top:10,
-                        right:10,
-                        opacity:0.6
+                        top:14,
+                        right:24,
                     }} >
-                        <Icon name="right" size={18} color='#fff' type='antdesign' ></Icon>
+                        <Icon name="plus" size={14} color='#fff' type='antdesign' ></Icon>
                     </TouchableOpacity>
             <View style={{padding:20,flex:1}}>
 
-                <View style={{height:'50%',marginTop:20}}>
-                    <Text style={{color:'#fff',fontSize:20,fontWeight:'600'}}>
+                <ScrollView style={{height:'50%',marginTop:8}}>
+                    <Text style={{color:'#1c1c1c',fontSize:20,fontWeight:'600'}}>
                         {user.LAN== 'F' ?'Jour sélectionné'  :'Selected date'}
                         </Text>
                         <View style={{
                             flexDirection:'row',
                             marginTop:12,
                             marginLeft:8 ,
-                            backgroundColor:'#fff',
+                            backgroundColor:'#ececec',
                             padding:6,
                             borderRadius:6,
     
                         }}>
                             
-                            <Text style={{color:'#000',marginLeft:10}}>{selectedDate}</Text>
+                            <Text style={{color:'#1c1c1c',marginLeft:10}}>{selectedDate}</Text>
                         </View>
-                        <Text style={{color:'#fff',fontSize:20,fontWeight:'600',marginTop:10}}>
+                        <Text style={{color:'#1c1c1c',fontSize:20,fontWeight:'600',marginTop:10}}>
                         {user.LAN== 'F' ?'Description'  :'Description'}
                         </Text>
                         <View style={{
                             flexDirection:'row',
                             marginTop:12,
                             marginLeft:8 ,
-                            backgroundColor:'#fff',
+                            backgroundColor:'#ececec',
                             padding:6,
                             borderRadius:6,
-    
+                            height:30
                         }}>
-                            <Text style={{color:'#000',marginLeft:10}}>{msgDate}</Text>
+                            <Text style={{color:'#1c1c1c',marginLeft:10}}>{msgDate}</Text>
                         </View>
-                </View>
+                </ScrollView>
             </View>
 
                 

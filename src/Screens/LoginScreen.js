@@ -109,17 +109,22 @@ export default function LoginScreen({ navigation }) {
 
     const {width, height} = Dimensions.get("window");
     return(
-        <Background>
-          
+        <View style={styles.background}>
+
+    <View style={{marginBottom:"10%"}}>
+      <Image source={require('../../assets/gg.jpg')} style={styles.imageRev} />
+      </View>
           {alert.length == 0?<View></View> :
           
-          <View style={{backgroundColor:'#DC143C',padding:4, borderRadius:8,width:'100%',alignItems:'center'}}>
+          <View style={{backgroundColor:'#DC143C',padding:4, borderRadius:8,width:'80%',alignItems:'center',alignSelf:'center'}}>
           <Text style={{color:'#fff',margin:4}}>{alert}</Text>
           
         </View>
           
           
           }
+          <View style={{padding:'8%',marginTop:20}}>
+          <ScrollView contentContainerStyle={{alignItems:'center'}}>
          
           <View style={{width:'100%',marginTop:'10%', alignItems:'flex-end',position:'relative'}}>
           <BtnIcon event={handleShowForm} />
@@ -218,7 +223,7 @@ export default function LoginScreen({ navigation }) {
             
 
             
-                <TouchableOpacity onPress={() => {formik.handleSubmit()}} style={styles.button}>
+                <TouchableOpacity onPressIn={() => {formik.handleSubmit()}} style={styles.button}>
                   <Text style={{color:'#fff',fontWeight:'600'}}>
                   {lang === 'e'? loginSceenLang[1].elt[0].btn[0] : loginSceenLang[0].elt[0].btn[0]}
                   </Text>
@@ -226,9 +231,9 @@ export default function LoginScreen({ navigation }) {
       
             
         
-                
-    
-        </Background>
+                </ScrollView>
+                </View>
+        </View>
     );
 }
 
@@ -260,5 +265,26 @@ const styles = StyleSheet.create({
     
     borderRadius:12,
     backgroundColor:'#3964bc'
-  }
+  }  ,
+  image: {
+    width: '100%',
+    height: 120,
+    position:'absolute',
+    bottom:0,
+    zIndex:-1
+  },
+  imageRev: {
+    width: '100%',
+    height: 80,
+
+    position:'absolute',
+    rotation:180
+
+  }, 
+   background: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: theme.colors.surface,
+    position:'relative'
+  },
 })

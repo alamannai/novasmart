@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet,SafeAreaView, KeyboardAvoidingView, Platform, View } from 'react-native'
+import { Image, StyleSheet,SafeAreaView, KeyboardAvoidingView, ScrollView, View } from 'react-native'
 import { theme } from '../core/theme'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -22,9 +22,12 @@ export default function Background({ children }) {
     </View>
       <Image source={require('../../assets/gg.jpg')} style={styles.imageRev} />
 
-        <View  style={styles.container}>
+      <ScrollView >
+       
         {children}
-        </View>
+   
+        </ScrollView>
+
      {/* <Image source={require('../../assets/gg.jpg')} style={styles.image} />*/}
     </SafeAreaView>
   )
