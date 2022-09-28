@@ -104,9 +104,9 @@ useEffect(() => {
   }, [year])
   const [dateString, setDateString] = useState("");
   const [msgDate, setMsgDate] = useState("Jour de travail");
-  const [changed, setChanged] = useState(true)
+  const [changed, setChanged] = useState()
   useEffect(() => { 
-
+    setChanged(false)
         for (let i = 0; i < jfer.length; i++) {
             const element = jfer[i];
     
@@ -116,7 +116,7 @@ useEffect(() => {
 
             if(sc == dateString){
                 setMsgDate(element.XSJFEEMP_LIB);
-     
+                setChanged(true)
                console.log("selected date is vacc",msgDate);
                break
             }
@@ -133,7 +133,7 @@ useEffect(() => {
                     
                     if(date == dateString){
                         setMsgDate(element.SABL_LIB);
-           
+                        setChanged(true)
                        console.log("selected date is vacc",msgDate);
                        break
                     }
@@ -159,7 +159,7 @@ useEffect(() => {
                     
                             if(nd == dateString){
                                 setMsgDate(element.SABL_LIB);
-                             
+                                setChanged(true)
                                console.log("selected date is vacc",msgDate);
                                break
                             }
@@ -462,10 +462,10 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                         
                     </View>
                         
-                    <TouchableOpacity  style={{
+                   {/* <TouchableOpacity  style={{
                         backgroundColor:'#00adef',
-                        width:25,
-                        height:25,
+                        width:35,
+                        height:35,
                         padding:4, 
                         borderRadius:4, 
                         alignItems: "center",
@@ -475,7 +475,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                         right:24,
                     }} >
                         <Icon name="plus" size={14} color='#fff' type='antdesign' ></Icon>
-                    </TouchableOpacity>
+                </TouchableOpacity>*/}
             <View style={{padding:20,flex:1}}>
 
                 <ScrollView style={{height:'50%',marginTop:8}}>
@@ -506,7 +506,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                             borderRadius:6,
                             height:30
                         }}>
-                            <Text style={{color:'#1c1c1c',marginLeft:10}}>{msgDate}</Text>
+                            <Text style={{color:'#1c1c1c',marginLeft:10}}>{changed?msgDate:"Jour de travail"}</Text>
                         </View>
                 </ScrollView>
             </View>

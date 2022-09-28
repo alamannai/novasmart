@@ -1,25 +1,16 @@
 import axios from "axios";
-import * as SecureStore from 'expo-secure-store';
-
-const REACT_APP_API_URL = 'http://10.12.12.72:3003/api/ngsmart'
 
 
+const REACT_APP_API_URL =  'http://10.12.12.72:3003/api/ngsmart'
 
- function save(key, value) {
-  const val =  SecureStore.setItemAsync(key, value);
-  if (val){
-    return val
-  }
-}
-
-async function dlt (key) {
-   await SecureStore.deleteItemAsync(key);
-}
+//JSON.parse(localStorage.getItem("uri"));
 
 
- const login =  async(username, password) => {
+
+
+ const login =  async(username, password, uri) => {
   return await axios
-    .post(REACT_APP_API_URL+'/login', {
+    .post(uri+'/login', {
       "ZHRU_COD":username,
       "ZHRU_PWD":password
     })

@@ -17,7 +17,7 @@ import { Icon } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import  Animated, { FadeIn, FadeOut }  from 'react-native-reanimated'; 
 const loginSceenLang = [{
   id:1,
   name:'f',
@@ -53,8 +53,9 @@ const loginSceenLang = [{
 
 export default function LoginScreen({ navigation }) {
   const [values, setValues] = useState({});
-    const [lang, setLang] = useState('e')
-
+    //const [lang, setLang] = useState('e')
+      const lang = useSelector((state) => state.app.lang);
+    
     const dispatch = useDispatch();
     const [isSelected, setSelection] = useState(false);
 
@@ -90,7 +91,7 @@ export default function LoginScreen({ navigation }) {
             navigation.navigate("Root");
           }else{
             console.log('status :',response.payload)
-            setAlert("Invalid username or password !")
+            setAlert("Check credentials & uri !!")
           }
             
         })
@@ -113,15 +114,42 @@ export default function LoginScreen({ navigation }) {
 
     <View style={{marginBottom:"10%"}}>
       <Image source={require('../../assets/gg.jpg')} style={styles.imageRev} />
-      </View>
+      </View >
           {alert.length == 0?<View></View> :
-          
-          <View style={{backgroundColor:'#DC143C',padding:4, borderRadius:8,width:'80%',alignItems:'center',alignSelf:'center'}}>
+        
+          <Animated.View 
+            entering={FadeIn}  
+            exiting={FadeOut}  
+            style={{
+              backgroundColor:'#DC143C',
+              padding:4,
+              opacity:0.8, 
+              borderRadius:8,
+              width:'80%',
+              alignItems:'center',
+              alignSelf:'center',
+              position:'relative',
+                }}
+          >
+              
           <Text style={{color:'#fff',margin:4}}>{alert}</Text>
+          <TouchableOpacity onPressIn={() => setAlert('') }
+            style={{
+            padding:2,
+            margin:8,
+            height:20,
+            alignItems:'center',
+            justifyContent:'center',
+            borderRadius:12,
+            position:'absolute',
+            right:0
+            }}>
+                  <Icon name="close" size={12} color={'#fff'} type='antdesign'></Icon>
+            
+        </TouchableOpacity>
+        </Animated.View>
           
-        </View>
-          
-          
+     
           }
           <View style={{padding:'8%',marginTop:20}}>
           <ScrollView contentContainerStyle={{alignItems:'center'}}>
@@ -137,11 +165,11 @@ export default function LoginScreen({ navigation }) {
 
 
           <Logo />
-             <Header>{lang === 'e'? loginSceenLang[1].elt[2].text : loginSceenLang[0].elt[2].text}</Header>
+             <Header>{lang == 'E'? loginSceenLang[1].elt[2].text : loginSceenLang[0].elt[2].text}</Header>
              <View style={{flexDirection: "column", width:'100%' ,justifyContent: "space-between"}}>
              <View style={{position:'relative'}}>
               <TextInput
-                  label={lang === 'e'? loginSceenLang[1].elt[1].input[0] : loginSceenLang[0].elt[1].input[0]}
+                  label={lang == 'E'? loginSceenLang[1].elt[1].input[0] : loginSceenLang[0].elt[1].input[0]}
                   returnKeyType="next"
                   value={formik.values.username}
                   onChangeText={formik.handleChange("username")}
@@ -168,7 +196,7 @@ export default function LoginScreen({ navigation }) {
              <View style={{flexDirection: "column", width:'100%' ,justifyContent: "space-between"}}>
               <View style={{position:'relative'}}>
               <TextInput
-                  label={lang === 'e'? loginSceenLang[1].elt[1].input[1] : loginSceenLang[0].elt[1].input[1]}
+                  label={lang == 'E'? loginSceenLang[1].elt[1].input[1] : loginSceenLang[0].elt[1].input[1]}
                   returnKeyType="done"
                   value={formik.values.password}
                   onChangeText={formik.handleChange("password")}
@@ -206,7 +234,7 @@ export default function LoginScreen({ navigation }) {
               <View style={{width:'50%',flexDirection:'row'}}>
                 <Checkbox disabled={false} value={isSelected} onValueChange={(newValue) => setSelection(newValue)} />
                 <Text style={{fontSize: 13,marginLeft:4}} >
-                  {lang === 'e'? loginSceenLang[1].elt[0].btn[1] : loginSceenLang[0].elt[0].btn[1]}
+                  {lang == 'E'? loginSceenLang[1].elt[0].btn[1] : loginSceenLang[0].elt[0].btn[1]}
                 </Text>
               </View>
 
@@ -214,7 +242,7 @@ export default function LoginScreen({ navigation }) {
               <View style={styles.forgotPassword}>
                     <TouchableOpacity>
                       <Text style={styles.forgot}>
-                        {lang === 'e'? loginSceenLang[1].elt[0].btn[2] : loginSceenLang[0].elt[0].btn[2]}
+                        {lang == 'E'? loginSceenLang[1].elt[0].btn[2] : loginSceenLang[0].elt[0].btn[2]}
                         </Text>
                     </TouchableOpacity>
               </View>
@@ -225,7 +253,7 @@ export default function LoginScreen({ navigation }) {
             
                 <TouchableOpacity onPressIn={() => {formik.handleSubmit()}} style={styles.button}>
                   <Text style={{color:'#fff',fontWeight:'600'}}>
-                  {lang === 'e'? loginSceenLang[1].elt[0].btn[0] : loginSceenLang[0].elt[0].btn[0]}
+                  {lang == 'E'? loginSceenLang[1].elt[0].btn[0] : loginSceenLang[0].elt[0].btn[0]}
                   </Text>
                 </TouchableOpacity>
       

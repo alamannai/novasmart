@@ -16,7 +16,8 @@ export const login = createAsyncThunk(
   "auth/login",
   async ({ username, password }, thunkAPI) => {
     try {
-      const data = await AuthService.login(username, password);
+      const uri = localStorage.getItem("uri");
+      const data = await AuthService.login(username, password, uri);
       if(data.connecte){
         const { connecte, token } = data;
         return { connecte, token };

@@ -254,7 +254,7 @@ export default function HomeScreen({navigation}) {
       </SafeAreaView>*/}
 
 
-           <View style={styles.elevation,{
+           <View style={{
                 height:'20%',
                 width:'100%',
                 backgroundColor:'#f5f5f5',
@@ -333,7 +333,7 @@ export default function HomeScreen({navigation}) {
               <View style={{
                   alignItems:'center',
                   position:'absolute',
-                  bottom:33,
+                  bottom:35,
                   left:'8%',
                   justifyContent:'center',
                   backgroundColor:'#00adef',

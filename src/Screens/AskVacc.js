@@ -39,13 +39,14 @@ export default function AskVacc({navigation}) {
         {
             id: "md",
             label : user.LAN == 'F'?'Plusieurs jours':'Several days'},
-        {
-            id: "mn",
-            label : user.LAN == 'F'?'Matin':'Morning'},
-        {
-            id: "af",
-            label : user.LAN == 'F'?'Aprés-midi':'Afternoon'},
-        ])
+        //{
+          //  id: "mn",
+           // label : user.LAN == 'F'?'Matin':'Morning'},
+      //  {
+          //  id: "af",
+           // label : user.LAN == 'F'?'Aprés-midi':'Afternoon'},
+       ]
+       )
 
       const [daysFree, setDaysFree] = useState([])
       
@@ -412,7 +413,7 @@ const showDay = (id) => {
        
    
                 } />
-                {/*{filteredItems.length == 0 ? <Text style={{color:'red',fontSize:12}}>{user.LAN =="F" ?"Cherche un motif ":""}</Text>:<View></View>}
+                {filteredItems.length == 0 ? <Text style={{color:'red',fontSize:12}}>{user.LAN =="F" ?"Cherche un motif ":""}</Text>:<View></View>}
                 <Text style={{fontSize:16,color:'#000',marginTop:20}} >
                     {user.LAN == 'F'?`Type d'absence :`:'Reason :'}
                 </Text>
@@ -437,7 +438,7 @@ const showDay = (id) => {
                         </TouchableOpacity>
      
    
-                } />*/}
+                } />
                 {/*<View style={{marginTop:20}}>
                 <DropDownPicker
                                 open={open}
@@ -455,7 +456,7 @@ const showDay = (id) => {
                 {day?<View></View>:
                 <View>
                 <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                    {user.LAN == 'F'?`Choisi le jour :`:'Choose the day :'}
+                    {user.LAN == 'F'?` Un jour :`:'One day :'}
                 </Text>
                 <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
                 <TouchableOpacity onPress={displayDatepicker} style={{
@@ -469,32 +470,42 @@ const showDay = (id) => {
                     justifyContent:'center',}}>
                         <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
                 </TouchableOpacity>
-                <TouchableOpacity  
-                style={{
-                    width:100,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#00008B',
-                    alignItems: "center",
-                    position:'absolute',
-                    bottom:0,
-                    right:20,
-                    justifyContent:'center',}}>
-                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
+                <TouchableOpacity  onPress={displayDatepickertime}
+                    style={{
+                        width:50,
+                        height:30,
+                        padding:2, 
+                        borderRadius:8, 
+                        backgroundColor:'#fff',
+                        alignItems: "center",
+                        marginHorizontal:30,
+                        justifyContent:'center',}}>
+                            <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={displayDatepickertime}
+                    style={{
+                        width:50,
+                        height:30,
+                        padding:2, 
+                        borderRadius:8, 
+                        backgroundColor:'#fff',
+                        alignItems: "center",
+                        marginHorizontal:30,
+                        justifyContent:'center',}}>
+                            <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
                 </TouchableOpacity>
                 </View>
                 </View>
                 }
 {/** Form several days */}
-            {//mday?<View></View>:
+            {mday?<View></View>:
                 <View>
                 <Text style={{fontSize:16,color:'#000',marginTop:40}} >
                     {user.LAN == 'F'?`De :`:'From :'}
                 </Text>
                 <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
                 <TouchableOpacity onPress={displayDatepicker} style={{
-                    width:50,
+                    width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
@@ -505,7 +516,7 @@ const showDay = (id) => {
                         <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={displayDatepickertime} style={{
-                    width:50,
+                    width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
@@ -515,27 +526,14 @@ const showDay = (id) => {
                     justifyContent:'center',}}>
                         <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
                 </TouchableOpacity>
-                <TouchableOpacity  
-                style={{
-                    width:100,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#00008B',
-                    alignItems: "center",
-                    position:'absolute',
-                    bottom:0,
-                    right:20,
-                    justifyContent:'center',}}>
-                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
-                </TouchableOpacity>
+
                 </View>
                 <Text style={{fontSize:16,color:'#000',marginTop:40}} >
                     {user.LAN == 'F'?`A :`:'To :'}
                 </Text>
                 <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
                 <TouchableOpacity onPress={displayDatepicker} style={{
-                    width:50,
+                    width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
@@ -546,7 +544,7 @@ const showDay = (id) => {
                         <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={displayDatepickertime} style={{
-                    width:50,
+                    width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
@@ -556,162 +554,12 @@ const showDay = (id) => {
                     justifyContent:'center',}}>
                         <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
                 </TouchableOpacity>
-                <TouchableOpacity  
-                style={{
-                    width:100,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#00008B',
-                    alignItems: "center",
-                    position:'absolute',
-                    bottom:0,
-                    right:20,
-                    justifyContent:'center',}}>
-                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
-                </TouchableOpacity>
+
                 </View>
                 </View>
                 }
-                {/** Form morning */}
-                {mn?<View></View>:
-                <View>
-                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                    {user.LAN == 'F'?`Matin :`:'Morning :'}
-                </Text>
-                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
-                <TouchableOpacity onPress={displayDatepicker} style={{
-                    width:50,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#fff',
-                    alignItems: "center",
-                    marginHorizontal:30,
-                    justifyContent:'center',}}>
-                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
-                </TouchableOpacity>
-                
-                <TouchableOpacity onPress={displayDatepickertime} style={{
-                    width:50,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#fff',
-                    alignItems: "center",
-                    marginHorizontal:30,
-                    justifyContent:'center',}}>
-                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={displayDatepickertime} style={{
-                    width:50,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#fff',
-                    alignItems: "center",
-                    marginHorizontal:30,
-                    justifyContent:'center',}}>
-                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
-                </TouchableOpacity>
                
-                </View>
-                <TouchableOpacity  
-                style={{
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#00008B',
-                    alignItems: "center",
-                    marginTop:16,
-                    justifyContent:'center',}}>
-                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
-                </TouchableOpacity>
-                </View>
-                }
-                {/** Form afternoon */}
-                {af?<View></View>:
-                <View>
-                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                    {user.LAN == 'F'?`Aprés-midi :`:'The Afternoon :'}
-                </Text>
-                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
-                <TouchableOpacity onPress={displayDatepicker} style={{
-                    width:50,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#fff',
-                    alignItems: "center",
-                    marginHorizontal:30,
-                    justifyContent:'center',}}>
-                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
-                </TouchableOpacity>
                 
-                <TouchableOpacity onPress={displayDatepickertime} style={{
-                    width:50,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#fff',
-                    alignItems: "center",
-                    marginHorizontal:30,
-                    justifyContent:'center',}}>
-                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={displayDatepickertime} style={{
-                    width:50,
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#fff',
-                    alignItems: "center",
-                    marginHorizontal:30,
-                    justifyContent:'center',}}>
-                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
-                </TouchableOpacity>
-                
-                </View>
-                <TouchableOpacity  
-                style={{
-                    height:30,
-                    padding:2, 
-                    borderRadius:8, 
-                    backgroundColor:'#00008B',
-                    marginTop:16,
-                    alignItems: "center",
-                    justifyContent:'center',}}>
-                        <Icon name="save" size={18} type='antdesign' color={'#fff'} />
-                </TouchableOpacity>
-                </View>
-                
-                }
-                 {/*<View style={[styles.container,{marginTop:20}]}>
-                    <TextInput
-                        label={'Commentaire ...'}
-                       />
-
-
-            </View>*/}
-              
-                  {/*  <View style={{marginTop:20,marginBottom:30}}>
-                      <Text style={{color:'#000'}}>{mydate.toISOString().slice(0,10)}</Text>
-                    </View>*/
-}
-                
-              { /* <View >
-              <View style={{backgroundColor:"gray", height:1,marginTop:30,opacity:0.2}}>
-                    
-                </View>
-                    <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                        {user.LAN == 'F'?`Message réçu :`:'Received message :'}
-                    </Text>
-                    <TextInput
-                        label={'Reponse du server'}
-                       />
-
-                </View>*/}
-
                 
            
 

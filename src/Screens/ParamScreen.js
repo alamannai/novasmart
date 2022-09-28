@@ -16,10 +16,14 @@ import * as Yup from "yup";
 import { Icon } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable } from 'react-native';
-
+import { addURI, modLan  } from "../features/appSlice";
 
 export default function ParamScreen({ navigation: { goBack } }) {
-
+    const dispatch = useDispatch();
+    const [uri, setUri] = useState('');
+    const [lan, setLan] = useState('');
+    const url = localStorage.getItem("uri");
+    const lang = localStorage.getItem("lan");
     return(
         <WrapElt color={'#00adef'}>
                 <View style={{
@@ -54,73 +58,81 @@ export default function ParamScreen({ navigation: { goBack } }) {
                         padding:20,
                         borderRadius:8 
                         }}>
+
+                    <Text style={{color:'#000',marginBottom:10,fontSize:16,fontWeight:'500'}}>
+                        URI  : {url? url : "Set your URI"}
+                    </Text> 
                     <View style={{position:'relative'}}>
                     <TextInput
                         label={'https://...'}
                         returnKeyType="next"
-                        
-
+                        onChangeText={text => setUri(text)}
+                        style={{width:'85%'}}
                     />
-                        <TouchableOpacity
+                        <TouchableOpacity onPress={() =>{
+                            dispatch(addURI({uri}))
+                            goBack()
+                        }}
                             style={{
                                 position:'absolute',
                                 top:20,
                                 right:-8,
+                                backgroundColor:"#00adef",
                             padding:2,
                             margin:8,
                             height:40,
-                            width:60,
+                            width:40,
                             alignItems:'center',
                             justifyContent:'center',
                             borderRadius:12,
-                            zIndex:3
+                            zIndex:10
                             }}>
-                                 <Icon name="server" size={18} color={'#000'} type='feather'></Icon>
+                                 <Icon name="reload1" size={18} color={'#fff'} type='antdesign'></Icon>
                             
                         </TouchableOpacity>
 
-                <View style={{alignItems:'center',justifyContent:'center'}} >
-{             /*  <Text style={{color:'#fff',alignSelf:'flex-start',margin:20}}>C</Text>*/ }
-                    <TextInput
-                        label={'Langue'}
-                        returnKeyType="next"
+                <View  >
+{    /*  <Text style={{color:'#fff',alignSelf:'flex-start',margin:20}}>C</Text>*/ }
 
-                    />
-                {/*<ScrollView horizontal={true}>
-                    <TouchableOpacity
+                <ScrollView horizontal={true}>
+                    <TouchableOpacity onPress={() =>{
+                            setLan('E')
+                            dispatch(modLan({lan}))
+                        }}
                             style={{
                             backgroundColor:"#f5f5f5",
                             padding:2,
                             margin:8,
                             height:40,
-                            width:120,
                             alignItems:'center',
                             justifyContent:'center',
                             borderRadius:12
                             }}>
                             <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >Anglais</Text>  
                         </TouchableOpacity>
-                        <TouchableOpacity
+                        <TouchableOpacity onPress={() =>{
+                            setLan('F')
+                            dispatch(modLan({lan}))
+                        }}
                             style={{
                             backgroundColor:"#f5f5f5",
                             padding:2,
                             margin:8,
                             height:40,
-                            width:120,
                             alignItems:'center',
                             justifyContent:'center',
                             borderRadius:12
                             }}>
                             <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >Français</Text>  
                         </TouchableOpacity>
-                        </ScrollView>*/}
+                        </ScrollView>
 
 
                 </View>
 
                 
                     </View>
-                    <TouchableOpacity
+                   { /*<TouchableOpacity
                             style={{
                             padding:2,
                             margin:8,
@@ -132,7 +144,7 @@ export default function ParamScreen({ navigation: { goBack } }) {
                             }}>
                                  <Icon name="reload1" size={16} color={'#fff'} type='antdesign'></Icon>
                             
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
 
                     </View>
 
