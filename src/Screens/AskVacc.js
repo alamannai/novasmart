@@ -17,6 +17,9 @@ import { useFormik } from "formik";
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import Autocomplete from 'react-native-autocomplete-input';
 import  Dropdown  from 'react-native-element-dropdown';
+import Checkbox from "expo-checkbox";
+
+
 export default function AskVacc({navigation}) {
     const dispatch = useDispatch()
 
@@ -34,11 +37,12 @@ export default function AskVacc({navigation}) {
 
       const [typeA,setTypeA] =useState ([
         {
-            id: "dy",
-            label : user.LAN == 'F'?'Jour':'Day'},
-        {
             id: "md",
             label : user.LAN == 'F'?'Plusieurs jours':'Several days'},
+        {
+            id: "dy",
+            label : user.LAN == 'F'?'Jour':'Day'},
+        
         //{
           //  id: "mn",
            // label : user.LAN == 'F'?'Matin':'Morning'},
@@ -88,16 +92,19 @@ export default function AskVacc({navigation}) {
 
   };
 
+  const [thisDateOne, setThisDateOne] = useState('')
+
   ///// 1 day date  picker
 const [mydate, setMydate] = useState(new Date());
 const [mode, setMode] = useState('date');
 const [show, setShow] = useState(false);
+
 const changeSelectedDate = (event, selectedDate) => {
-const currentDate = selectedDate || mydate;
-if (Platform.OS === 'android') {
-  setShow(false);
-}
-setMydate(currentDate);
+    const currentDate = selectedDate || mydate;
+    if (Platform.OS === 'android') {
+    setShow(false);
+    }
+    setMydate(currentDate);
 
 };
 
@@ -109,7 +116,48 @@ const displayDatepicker = () => {
 showMode('date');
 };
 
+ ///// start vacc time  
+ const [mydatetime, setMydatetime] = useState(new Date());
+ const [modetime, setModetime] = useState('date');
+ const [showtime, setShowtime] = useState(false);
+ const changeSelectedDatetime = (event, selectedDatetime) => {
+ const currentDatetime = selectedDatetime || mydatetime;
+ if (Platform.OS === 'android') {
+ setShowtime(false);
+ }
+ setMydatetime(currentDatetime);
 
+ };
+
+ const showModetime = (currentModetime) => {
+ setShowtime(true);
+ setModetime(currentModetime);
+ };
+ const displayDatepickertime = () => {
+ showModetime('time');
+ };
+
+     
+///// end vacc time 
+const [mydatetimeend, setMydatetimeend] = useState(new Date());
+const [modetimeend, setModetimeend] = useState('date');
+const [showtimeend, setShowtimeend] = useState(false);
+const changeSelectedDatetimeend = (event, selectedDatetimeend) => {
+const currentDatetimeend = selectedDatetimeend || mydatetimeend;
+if (Platform.OS === 'android') {
+setShowtimeend(false);
+}
+setMydatetimeend(currentDatetimeend);
+
+};
+
+const showModetimeend = (currentModetimeend) => {
+setShowtimeend(true);
+setModetimeend(currentModetimeend);
+};
+const displayDatepickertimeend = () => {
+showModetimeend('time');
+};
   ///// several days start date  picker
   const [mydatesc, setMydatesc] = useState(new Date());
   const [modesc, setModesc] = useState('date');
@@ -131,6 +179,7 @@ showMode('date');
   const displayDatepickerSc = () => {
     showModesc('date');
   };
+
 
 
    ///// several days end date  picker
@@ -155,6 +204,53 @@ showMode('date');
      showModeec('date');
    };
 
+
+    ///// several days start time  
+    const [mydatesctime, setMydatesctime] = useState(new Date());
+    const [modesctime, setModesctime] = useState('time');
+    const [showsctime, setShowsctime] = useState(false);
+
+    const changeSelectedDateSctime = (event, selectedDatesctime) => {
+    const currentDatesctime = selectedDatesctime || mydatesctime;
+    if (Platform.OS === 'android') {
+      setShowsctime(false);
+    }
+    setMydatesctime(currentDatesctime);
+    
+    };
+    
+    const showModesctime = (currentModesctime) => {
+      setShowsctime(true);
+      setModesctime(currentModesctime);
+    };
+  
+    const displayDatepickerSctime = () => {
+      showModesctime('time');
+    };
+
+  ///// several days end time  
+    const [mydateectime, setMydateectime] = useState(new Date());
+    const [modeectime, setModeectime] = useState('time');
+    const [showectime, setShowectime] = useState(false);
+
+    const changeSelectedDateEctime = (event, selectedDateectime) => {
+        const currentDateectime = selectedDateectime || mydateectime;
+        if (Platform.OS === 'android') {
+          setShowectime(false);
+        }
+        setMydateectime(currentDateectime);
+        
+        };
+        
+        const showModeectime = (currentModeectime) => {
+          setShowectime(true);
+          setModeectime(currentModeectime);
+        };
+      
+        const displayDatepickerEctime = () => {
+          showModeectime('time');
+        };
+
 const [valStart, setValStart] = useState(false);
 const [day, setDay] = useState(true);
 const [mday, setMday] = useState(false);
@@ -162,19 +258,22 @@ const [mday, setMday] = useState(false);
 const [mn, setMn] = useState(true);
 const [af, setAf] = useState(true);
 
+const [typeselected, setTypeselected] = useState('md');
+
 const showDay = (id) => {
+    setTypeselected(id)
     if(id === "dy"){
         setMday(true);
         setMn(true);
         setAf(true);
-        setDay(!day);
-       
+        setDay(false);
+        
     }
     if(id === "md"){
         setDay(true);
         setMn(true);
         setAf(true);
-        setMday(!mday);
+        setMday(false);
     }
     if(id === "mn"){
         setDay(true);
@@ -218,52 +317,11 @@ const showDay = (id) => {
       const [val, setVal] = useState('');
 
 
-      ///// start vacc time  picker
-        const [mydatetime, setMydatetime] = useState(new Date());
-        const [modetime, setModetime] = useState('date');
-        const [showtime, setShowtime] = useState(false);
-        const changeSelectedDatetime = (event, selectedDatetime) => {
-        const currentDatetime = selectedDatetime || mydatetime;
-        if (Platform.OS === 'android') {
-        setShowtime(false);
-        }
-        setMydatetime(currentDatetime);
 
-        };
-
-        const showModetime = (currentModetime) => {
-        setShowtime(true);
-        setModetime(currentModetime);
-        };
-        const displayDatepickertime = () => {
-        showModetime('time');
-        };
-
-        ///// end vacc timeend  picker
-            const [mydatetimeend, setMydatetimeend] = useState(new Date());
-            const [modetimeend, setModetimeend] = useState('date');
-            const [showtimeend, setShowtimeend] = useState(false);
-            const changeSelectedDatetimeend = (event, selectedDatetimeend) => {
-            const currentDatetimeend = selectedDatetimeend || mydatetimeend;
-            if (Platform.OS === 'android') {
-            setShowtimeend(false);
-            }
-            setMydatetimeend(currentDatetimeend);
-
-            };
-
-            const showModetimeend = (currentModetimeend) => {
-            setShowtimeend(true);
-            setModetimeend(currentModetimeend);
-            };
-            const displayDatepickertimeend = () => {
-            showModetimeend('time');
-            };
 
 
             const validationSchema = Yup.object().shape({
                 motif: Yup.string().required("Required"),
-                type: Yup.string().required("Password Required"),
                 startDate: Yup.date().required("required"),
                 endDate: Yup.date().required("required"),
               });
@@ -271,7 +329,6 @@ const showDay = (id) => {
               const formik = useFormik({
                 initialValues: {
                     motif: "",
-                    type: "",
                     startDate: "",
                     endDate: "",
                 },
@@ -291,7 +348,35 @@ const showDay = (id) => {
             
               
             };
+
+
+            const handleSub = () => {
+                console.log(mydate)
+                
+
+                console.log(formik.values)
+              };
+
+
+              useEffect(() => {
+                
+                if(isSelected){
+                    const startDate = mydate.toISOString().slice(0,10)+"T"+"00:00:00"+mydate.toISOString().slice(19)
+                    const endDate = mydate.toISOString().slice(0,10)+"T"+"23:00:00"+mydate.toISOString().slice(19)
+                    formik.setFieldValue("startDate",startDate)    
+                    formik.setFieldValue("endDate",endDate) 
+                }else{
+                    const startDate = mydate.toISOString().slice(0,10)+"T"+mydatetime.toISOString().slice(11)
+                    const endDate = mydate.toISOString().slice(0,10)+"T"+mydatetimeend.toISOString().slice(11)
+                    formik.setFieldValue("startDate",startDate)    
+                    formik.setFieldValue("endDate",endDate) 
+                }
+                 
+              }, [mydate,mydatetime,mydatetimeend,isSelected])
             
+              
+    const [isSelected, setSelection] = useState(false);
+
   return (isLoading? 
     <View style={{flex: 1,
         justifyContent: "center",
@@ -329,7 +414,7 @@ const showDay = (id) => {
             <View style={[styles.elevation,{
                 backgroundColor:'#fff',
                 padding:8,
-                marginTop:'20%',
+                //marginTop:'10%',
                 flex:1,
                 position:'relative',
                 borderTopRightRadius:  12,
@@ -425,7 +510,7 @@ const showDay = (id) => {
                     <TouchableOpacity
                             onPress={() => showDay(item.id)}
                             style={{
-                            backgroundColor:'#f5f5f5',
+                            backgroundColor: typeselected == item.id? '#0000b0' : '#f5f5f5',
                             padding:2,
                             margin:8,
                             height:40,
@@ -434,7 +519,7 @@ const showDay = (id) => {
                             justifyContent:'center',
                             borderRadius:12
                             }}>
-                            <Text style={{paddingHorizontal:8,color:"#1c1c1c"}} >{item.label}</Text>  
+                            <Text style={{paddingHorizontal:8,color: typeselected == item.id?"#fff" :"#1c1c1c"}} >{item.label}</Text>  
                         </TouchableOpacity>
      
    
@@ -452,119 +537,170 @@ const showDay = (id) => {
                 </View>*/}
 
                            
-{/** Form 1 day */}
+                {/** Form 1 day */}
                 {day?<View></View>:
                 <View>
-                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                    {user.LAN == 'F'?` Un jour :`:'One day :'}
+                <View style={{width:'50%',flexDirection:'row',marginTop:10}}>
+                <Checkbox disabled={false} value={isSelected} onValueChange={(newValue) => setSelection(newValue)} />
+                <Text style={{fontSize: 13,marginLeft:4}} >
+                  {user.LAN == 'F'?"Journée entiere" : "Full day"}
                 </Text>
-                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
+              </View>
+
+                <Text style={{fontSize:16,color:'#000',marginTop:30}} >
+                    {user.LAN == 'F'?` Le : `:'The : '}
+                    
+                </Text>
+
+                <View style={{
+                    flexDirection:'row',
+                    width:'100%' , 
+                    marginTop:16,
+                    backgroundColor:"#f5f5f5",
+                    borderRadius:8,
+                    padding:4,
+                    alignItems:'center',
+                    justifyContent:'center'
+                    }}>
                 <TouchableOpacity onPress={displayDatepicker} style={{
-                    width:50,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
-                    backgroundColor:'#fff',
                     alignItems: "center",
                     marginHorizontal:30,
                     justifyContent:'center',}}>
-                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                        <Text style={{fontSize:14}}>{mydate.toISOString().slice(0,10)} </Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={displayDatepickertime}
+                {isSelected?<View></View>:
+                <View style={{flexDirection:'row'}}>
+                 <TouchableOpacity  onPress={displayDatepickertime}
+                    style={{
+                        height:30,
+                        padding:2, 
+                        borderRadius:8, 
+                        alignItems: "center",
+                        marginHorizontal:30,
+                        justifyContent:'center',}}>
+                            <Text style={{fontSize:14}}>{mydatetime.toISOString().slice(11,16)}</Text> 
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={displayDatepickertimeend}
                     style={{
                         width:50,
                         height:30,
                         padding:2, 
                         borderRadius:8, 
-                        backgroundColor:'#fff',
+
                         alignItems: "center",
                         marginHorizontal:30,
                         justifyContent:'center',}}>
-                            <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                            <Text style={{fontSize:14}}>{mydatetimeend.toISOString().slice(11,16)} </Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={displayDatepickertime}
-                    style={{
-                        width:50,
-                        height:30,
-                        padding:2, 
-                        borderRadius:8, 
-                        backgroundColor:'#fff',
-                        alignItems: "center",
-                        marginHorizontal:30,
-                        justifyContent:'center',}}>
-                            <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
-                </TouchableOpacity>
+                    </View>
+              }
                 </View>
+              {  /*<View style={{
+                    marginTop:20,
+                    flexDirection:'row',
+                    backgroundColor:"#f5f5f5",
+                    borderRadius:8,
+                    padding:4,
+                    alignItems:'center',
+                    justifyContent:'center'
+                    }}>
+                    <Text style={{fontSize:16}}>{mydate.toISOString().slice(0,10)} </Text> 
+                    {isSelected? <View></View> :
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={{fontSize:16}}> / {mydatetime.toISOString().slice(11,16)} - </Text> 
+                            <Text style={{fontSize:16}}>{mydatetimeend.toISOString().slice(11,16)} </Text>
+                        </View>
+                    
+                    } 
+                </View>*/}
                 </View>
                 }
-{/** Form several days */}
+            {/** Form several days */}
             {mday?<View></View>:
                 <View>
-                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                    {user.LAN == 'F'?`De :`:'From :'}
+                <Text style={{fontSize:16,color:'#000',marginTop:20}} >
+                    {user.LAN == 'F'?`De : `:'From : '}   
                 </Text>
-                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
-                <TouchableOpacity onPress={displayDatepicker} style={{
+                <View style={{
+                    flexDirection:'row',
+                    width:'100%' , 
+                    marginTop:16,
+                    backgroundColor:"#f5f5f5",
+                    borderRadius:8,
+                    padding:4,
+                    alignItems:'center',
+                    justifyContent:'center'
+                    }}>
+                <TouchableOpacity onPress={displayDatepickerSc} style={{
                     width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
-                    backgroundColor:'#fff',
                     alignItems: "center",
                     marginHorizontal:30,
                     justifyContent:'center',}}>
-                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                        <Text style={{fontSize:14}}>{mydatesc.toISOString().slice(0,10)} </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={displayDatepickertime} style={{
+                <TouchableOpacity onPress={displayDatepickerSctime} style={{
                     width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
-                    backgroundColor:'#fff',
                     alignItems: "center",
                     marginHorizontal:30,
                     justifyContent:'center',}}>
-                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                        <Text style={{fontSize:14}}>{mydatesctime.toISOString().slice(11,16)}</Text> 
                 </TouchableOpacity>
 
                 </View>
-                <Text style={{fontSize:16,color:'#000',marginTop:40}} >
-                    {user.LAN == 'F'?`A :`:'To :'}
+                <Text style={{fontSize:16,color:'#000',marginTop:20}} >
+                    {user.LAN == 'F'?`A : `:'To : '}       
                 </Text>
-                <View style={{flexDirection:'row',width:'100%' , marginTop:16}}>
-                <TouchableOpacity onPress={displayDatepicker} style={{
+                <View style={{
+                    flexDirection:'row',
+                    width:'100%' ,
+                     marginTop:16,
+                     backgroundColor:"#f5f5f5",
+                     borderRadius:8,
+                     padding:4,
+                     alignItems:'center',
+                     justifyContent:'center'
+                     }}>
+                <TouchableOpacity onPress={displayDatepickerEc} style={{
                     width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
-                    backgroundColor:'#fff',
                     alignItems: "center",
                     marginHorizontal:30,
                     justifyContent:'center',}}>
-                        <Icon name="calendar" size={18} type='antdesign' color={'#000'} />
+                        <Text style={{fontSize:14}}>{mydateec.toISOString().slice(0,10)} </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={displayDatepickertime} style={{
+                <TouchableOpacity onPress={displayDatepickerEctime} style={{
                     width:80,
                     height:30,
                     padding:2, 
                     borderRadius:8, 
-                    backgroundColor:'#fff',
                     alignItems: "center",
                     marginHorizontal:30,
                     justifyContent:'center',}}>
-                        <Icon name="ios-time-outline" size={18} type='ionicon' color={'#000'} />
+                         <Text style={{fontSize:14}}>{mydateectime.toISOString().slice(11,16)}</Text> 
                 </TouchableOpacity>
 
                 </View>
                 </View>
                 }
                
-                
+
                 
            
 
             </ScrollView>
-                        <TouchableOpacity  style={{
+                        <TouchableOpacity  onPress={handleSub}
+                        style={{
                             backgroundColor:'#798571',
                             width:40,
                             height:40,
@@ -650,6 +786,33 @@ const showDay = (id) => {
 
                      display="default"
                      onChange={changeSelectedDatetimeend}
+                     timeZoneOffsetInMinutes={0}
+       
+
+            />:<View></View>
+         }
+         {showsctime? 
+                  <DateTimePicker
+                     testID="TimePickertimestart"
+                     value={mydatesctime}
+                     mode={modesctime}
+
+                     display="default"
+                     onChange={changeSelectedDateSctime}
+                     timeZoneOffsetInMinutes={0}
+       
+
+            />:<View></View>
+         }
+
+            {showectime? 
+                  <DateTimePicker
+                     testID="TimePickertimeend"
+                     value={mydateectime}
+                     mode={modeectime}
+
+                     display="default"
+                     onChange={changeSelectedDateEctime}
                      timeZoneOffsetInMinutes={0}
        
 

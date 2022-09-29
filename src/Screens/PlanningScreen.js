@@ -105,8 +105,11 @@ useEffect(() => {
   const [dateString, setDateString] = useState("");
   const [msgDate, setMsgDate] = useState("Jour de travail");
   const [changed, setChanged] = useState()
+  const [delAbs, setDelAbs] = useState()
+
   useEffect(() => { 
     setChanged(false)
+    setDelAbs(false)
         for (let i = 0; i < jfer.length; i++) {
             const element = jfer[i];
     
@@ -134,6 +137,7 @@ useEffect(() => {
                     if(date == dateString){
                         setMsgDate(element.SABL_LIB);
                         setChanged(true)
+                        setDelAbs(true)
                        console.log("selected date is vacc",msgDate);
                        break
                     }
@@ -160,6 +164,7 @@ useEffect(() => {
                             if(nd == dateString){
                                 setMsgDate(element.SABL_LIB);
                                 setChanged(true)
+                                setDelAbs(true)
                                console.log("selected date is vacc",msgDate);
                                break
                             }
@@ -270,7 +275,7 @@ useEffect(() => {
                 
             obj[date]={
                 selected: true, 
-                selectedColor:  '#FAF884',//element.SGAB_COU,
+                selectedColor: element.SABS_COD == "AB"? '#FAF884' :  '#81c784',//element.SGAB_COU,
                 marked:true,
                 dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                 }
@@ -295,9 +300,9 @@ useEffect(() => {
                 
                     obj[nd]={
                         selected: true, 
-                        selectedColor: '#FAF884',//element.SGAB_COU,
+                        selectedColor: element.SABS_COD == "AB"? '#FAF884' :  '#81c784',//element.SGAB_COU,
                         marked: true, 
-                        dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
+                        dotColor: element.SABS_COD == 'AB'?'red' : 'green',
                         }
 
                 }
@@ -450,14 +455,14 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                 margin:4
                 }]}>
                     <View style={{
-                        backgroundColor:'#fff',
+                        backgroundColor:'#0000b0',
                         position:'absolute',
-                        top:-14,
+                        top:14,
                         right:'47%',
                         height:7,
                         width:'10%',
                         borderRadius:8,
-                        opacity:0.4
+                        opacity:0.2
                         }}>
                         
                     </View>
@@ -476,6 +481,8 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                     }} >
                         <Icon name="plus" size={14} color='#fff' type='antdesign' ></Icon>
                 </TouchableOpacity>*/}
+
+                
             <View style={{padding:20,flex:1}}>
 
                 <ScrollView style={{height:'50%',marginTop:8}}>
@@ -506,8 +513,25 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                             borderRadius:6,
                             height:30
                         }}>
-                            <Text style={{color:'#1c1c1c',marginLeft:10}}>{changed?msgDate:"Jour de travail"}</Text>
+                            <Text style={{color:'#1c1c1c',marginLeft:10}}>{changed?msgDate:user.LAN== 'F' ?"Jour de travail":"Work day"}</Text>
                         </View>
+                        
+                            {delAbs?
+                            <View style={{position:'relative',marginTop:10,alignItems:'flex-end'}}>
+                            <TouchableOpacity  style={{
+                            backgroundColor:'orange',
+                            height:35,
+                            width:'40%',
+                            padding:6, 
+                            borderRadius:4, 
+                            alignItems: "center",
+                            justifyContent:'center',
+    
+                        }} >
+                            <Text style={{color:'#fff',fontSize:14,fontWeight:'600'}}>{user.LAN== 'F' ?"Supprimer Abs":"Delete Abs"}</Text>
+                    </TouchableOpacity></View>:<View></View>}
+                        
+                        
                 </ScrollView>
             </View>
 

@@ -60,8 +60,22 @@ export default function ParamScreen({ navigation: { goBack } }) {
                         }}>
 
                     <Text style={{color:'#000',marginBottom:10,fontSize:16,fontWeight:'500'}}>
-                        URI  : {url? url : "Set your URI"}
+                        URI  :
                     </Text> 
+                    <View style={{
+
+                        marginTop:10,
+                        backgroundColor:"#f5f5f5",
+                        borderRadius:8,
+                        padding:4,
+                        alignItems:'center',
+                        justifyContent:'center'
+                        }}>
+                        <Text style={{color:'#000',marginBottom:10,fontSize:16,fontWeight:'600',fontStyle:'italic'}}>
+                            {url? url : "Set your URI"}
+                        </Text> 
+                    </View>
+                    
                     <View style={{position:'relative'}}>
                     <TextInput
                         label={'https://...'}

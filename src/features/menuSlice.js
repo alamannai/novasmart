@@ -21,8 +21,9 @@ export const getMenu = createAsyncThunk(
       try {
         const accessToken = JSON.parse(localStorage.getItem("accessToken"));
         const user = JSON.parse(localStorage.getItem("user"));
+        const uri = localStorage.getItem("uri");
         console.log(user)
-        const data = await MenuService.getMenu(user.LAN, user.ZHRU_USR, user.ZHRU_COD, user.SCIV_PAS, accessToken)
+        const data = await MenuService.getMenu(user.LAN, user.ZHRU_USR, user.ZHRU_COD, user.SCIV_PAS, accessToken,uri)
         return data
       } catch (error) {
         const message =
