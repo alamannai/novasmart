@@ -54,8 +54,13 @@ const loginSceenLang = [{
 export default function LoginScreen({ navigation }) {
   const [values, setValues] = useState({});
     //const [lang, setLang] = useState('e')
-      const lang = useSelector((state) => state.app.lang);
-    
+      const lan = useSelector((state) => state.app.lang);
+      const [lang, setLang] = useState(lan)
+      useEffect(() => {
+        console.log("lan login :",lan)
+        setLang(lan)
+      },[lan,lang])
+      
     const dispatch = useDispatch();
     const [isSelected, setSelection] = useState(false);
 

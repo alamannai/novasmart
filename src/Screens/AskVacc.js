@@ -18,7 +18,7 @@ import {Calendar, LocaleConfig} from 'react-native-calendars';
 import Autocomplete from 'react-native-autocomplete-input';
 import  Dropdown  from 'react-native-element-dropdown';
 import Checkbox from "expo-checkbox";
-
+import  Animated, { FadeIn, FadeInDown, FadeOut, LightSpeedInRight, SlideInDown, SlideInUp, ZoomIn, ZoomInRight,  }  from 'react-native-reanimated'; 
 
 export default function AskVacc({navigation}) {
     const dispatch = useDispatch()
@@ -386,12 +386,12 @@ const showDay = (id) => {
         }}>
         <ActivityIndicator size="large" color="#8cd3ff"/>
     </View> :
-        <WrapElt color={'#00adef'}>
-            <View style={{flex:1,backgroundColor:'#00adef',width:'100%',}}>
+        <WrapElt color={'#f5f5f5'}>
+            <View style={{flex:1,backgroundColor:'#f5f5f5',width:'100%',position:'relative'}}>
   
             <View style={{ height:80,marginLeft:10}} >
-            <TouchableOpacity onPressOut={() =>handleNavigate('Root')} style={{
-                backgroundColor:'#00adef',
+            <TouchableOpacity onPressOut={() =>navigation.goBack()} style={{
+                backgroundColor:'#f5f5f5',
                 width:30,
                 height:30,
                 padding:4, 
@@ -401,31 +401,32 @@ const showDay = (id) => {
                 position:"absolute",
                 top:16
             }} >
-                <Icon name="left" size={18} color='#fff' type='antdesign' ></Icon>
+                <Icon name="left" size={18} color='#1c1c1c' type='antdesign' ></Icon>
             </TouchableOpacity>
     
 
-            
+          
     
     
             </View>
             
     
-            <View style={[styles.elevation,{
+            <Animated.View entering={SlideInDown.duration(400)} 
+              style={[styles.elevation,{
                 backgroundColor:'#fff',
                 padding:8,
                 //marginTop:'10%',
                 flex:1,
                 position:'relative',
-                borderTopRightRadius:  12,
-                borderTopLeftRadius:  12,
+                borderTopRightRadius:  30,
+                borderTopLeftRadius:  30,
                 //borderBottomRightRadius:  12,
                 //borderBottomLeftRadius:  12,
                 }]}>
                     <View style={{
-                        backgroundColor:'#fff',
+                        backgroundColor:'#d3d3d3',
                         position:'absolute',
-                        top:-14,
+                        top:14,
                         right:'47%',
                         height:7,
                         width:'10%',
@@ -434,12 +435,31 @@ const showDay = (id) => {
                         }}>
                         
                     </View>
-                        
-                  
-            <View style={{padding:20,flex:1}}>
-            <Text style={{marginLeft:20,fontSize:28,fontWeight:'700',color:'#3964bc',marginTop:8,marginBottom:20}} >
+                    <View >
+            <Text style={{marginLeft:20,marginTop:30,fontSize:26,fontWeight:'700',color:'#1c1c1c'}} >
                     {user.LAN == 'F'?'Demande un congé':'Ask for leave '}
                 </Text>
+                
+            </View>
+            <TouchableOpacity  onPress={handleSub}
+                        style={{
+                            backgroundColor:'#00adef',
+                            width:55,
+                            height:40,
+                            padding:4, 
+                            borderRadius:10, 
+                            alignItems: "center",
+                            justifyContent:'center',
+                            position:'absolute',
+                            right:25,
+                            top:20
+                            
+                        }} >
+                                 <Icon name="send" size={18} color='#fff' type='feather' ></Icon>
+                            </TouchableOpacity>
+            <View style={{padding:20,flex:1}}>
+
+            
                 <ScrollView>
                 <Text style={{fontSize:16,color:'#000',marginTop:16}} >
                     {user.LAN == 'F'?'Motif :':'Reason :'}
@@ -482,7 +502,7 @@ const showDay = (id) => {
                     <TouchableOpacity
                     onPress={() => chooseMotif(item.SABS_COD)}
                             style={{
-                            backgroundColor:motifId == item.SABS_COD?"#0000b0" :"#f5f5f5",
+                            backgroundColor:motifId == item.SABS_COD?"#00adef" :"#f5f5f5",
                             padding:2,
                             margin:8,
                             height:40,
@@ -510,7 +530,7 @@ const showDay = (id) => {
                     <TouchableOpacity
                             onPress={() => showDay(item.id)}
                             style={{
-                            backgroundColor: typeselected == item.id? '#0000b0' : '#f5f5f5',
+                            backgroundColor: typeselected == item.id? '#00adef' : '#f5f5f5',
                             padding:2,
                             margin:8,
                             height:40,
@@ -539,7 +559,7 @@ const showDay = (id) => {
                            
                 {/** Form 1 day */}
                 {day?<View></View>:
-                <View>
+                <Animated.View entering={FadeIn.duration(800)} >
                 <View style={{width:'50%',flexDirection:'row',marginTop:10}}>
                 <Checkbox disabled={false} value={isSelected} onValueChange={(newValue) => setSelection(newValue)} />
                 <Text style={{fontSize: 13,marginLeft:4}} >
@@ -616,11 +636,11 @@ const showDay = (id) => {
                     
                     } 
                 </View>*/}
-                </View>
+                </Animated.View>
                 }
             {/** Form several days */}
             {mday?<View></View>:
-                <View>
+                <Animated.View entering={FadeIn.duration(800)}>
                 <Text style={{fontSize:16,color:'#000',marginTop:20}} >
                     {user.LAN == 'F'?`De : `:'From : '}   
                 </Text>
@@ -691,7 +711,7 @@ const showDay = (id) => {
                 </TouchableOpacity>
 
                 </View>
-                </View>
+                </Animated.View>
                 }
                
 
@@ -699,27 +719,12 @@ const showDay = (id) => {
            
 
             </ScrollView>
-                        <TouchableOpacity  onPress={handleSub}
-                        style={{
-                            backgroundColor:'#798571',
-                            width:40,
-                            height:40,
-                            padding:4, 
-                            borderRadius:10, 
-                            alignItems: "center",
-                            justifyContent:'center',
-                            position:'absolute',
-                            right:15,
-                            top:10
-                            
-                        }} >
-                                 <Icon name="send" size={18} color='white' type='feather' ></Icon>
-                            </TouchableOpacity>
+                        
                  
             </View>
 
                 
-            </View>
+            </Animated.View>
              
 
         </View>
@@ -856,11 +861,11 @@ const styles = StyleSheet.create({
         top:16
     }   ,  
     elevation: {
-        elevation: 2,
-        shadowColor: '#999999',
-        shadowOpacity:0.8,
-        shadowOffset: { width: 0, height: 0 },
-    },
+      elevation: 6,
+      shadowColor: 'gray',
+      shadowOpacity:0.4,
+      shadowOffset: { width: 0, height: 0 },
+  },
     container: {
         height:60,
         marginTop: 10,

@@ -8,7 +8,7 @@ import { useDispatch ,useSelector } from "react-redux";
 import WrapElt from '../components/WrapElt';
 import { string } from 'yup';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import  Animated, { FadeIn, FadeInDown, FadeOut, LightSpeedInRight, ZoomIn, ZoomInRight,  }  from 'react-native-reanimated'; 
 import { getFer, getAbs } from '../features/calendarSlice';
 import FormAdd from '../components/FormAdd';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
@@ -275,7 +275,7 @@ useEffect(() => {
                 
             obj[date]={
                 selected: true, 
-                selectedColor: element.SABS_COD == "AB"? '#FAF884' :  '#81c784',//element.SGAB_COU,
+                selectedColor:  '#FAF884' ,//element.SGAB_COU,
                 marked:true,
                 dotColor: element.SGAB_COD == 'MA'?'green' : 'purple',
                 }
@@ -300,7 +300,7 @@ useEffect(() => {
                 
                     obj[nd]={
                         selected: true, 
-                        selectedColor: element.SABS_COD == "AB"? '#FAF884' :  '#81c784',//element.SGAB_COU,
+                        selectedColor: '#FAF884' ,//element.SGAB_COU,
                         marked: true, 
                         dotColor: element.SABS_COD == 'AB'?'red' : 'green',
                         }
@@ -324,15 +324,15 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
  
 
 
-  
+  const [showDesc, setShowDesc] = useState(false)
 
   return (
-        <WrapElt color={'#00adef'}>
-            <View style={{flex:1,backgroundColor:'#00adef',width:'100%'}}>
+        <WrapElt color={'#fff'}>
+            <View style={{flex:1,backgroundColor:'#fff',width:'100%'}}>
   
             <View style={{ height:80,marginLeft:10}} >
             <TouchableOpacity onPressOut={() =>handleNavigate('Root')} style={{
-                backgroundColor:'#00adef',
+
                 width:30,
                 height:30,
                 padding:4, 
@@ -342,9 +342,22 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                 position:"absolute",
                 top:16
             }} >
-                <Icon name="left" size={18} color='#fff' type='antdesign' ></Icon>
+                <Icon name="left" size={18} color='#00adef' type='antdesign' ></Icon>
             </TouchableOpacity>
-    
+            <TouchableOpacity onPressOut={() =>handleNavigate('SPH_SABD')}  style={{
+                        backgroundColor:'#00adef',
+                        width:45,
+                        height:35,
+                        padding:4, 
+                        borderRadius:4, 
+                        alignItems: "center",
+                        justifyContent:'center',
+                        position:"absolute",
+                        top:14,
+                        right:24,
+                    }} >
+                        <Icon name="plus" size={16} color='#fff' type='antdesign' ></Icon>
+                </TouchableOpacity>
 
             {isLoading? 
                 <View style={{
@@ -359,20 +372,31 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
             </View>
 <View >
 
-            <View style={{backgroundColor:'#00adef',height:'43%',position:'relative'}}>
-            
+            <Animated.View entering={LightSpeedInRight.duration(1000)}   
+                style={{backgroundColor:'#fff',
+                height:'43%',
+                position:'relative',
+                borderRadius:12
+                }}>
             <Calendar 
+
                 firstDay={1}
             hideExtraDays={true}
                 theme={{
-                    arrowColor: '#fff',
-                    calendarBackground: '#00adef',
-                    monthTextColor: '#fff',
-                    dayTextColor: '#fff',
+                    arrowColor: '#00adef',
+                    calendarBackground: '#fff',
+                    monthTextColor: '#00adef',
+                    dayTextColor: '#1c1c1c',
                     selectedDayTextColor: 'gray',
-                    todayTextColor: 'red',
-                    textSectionTitleColor: '#fff',
+                    todayTextColor: 'orange',
+                    textSectionTitleColor: '#000',
                     selectedDayTextColor: '#000',
+                    textDayFontWeight: '300',
+                    textMonthFontWeight: 'bold',
+                    textDayHeaderFontWeight: '300',
+                    textDayFontSize: 16,
+                    textMonthFontSize: 16,
+                    textDayHeaderFontSize: 16
                 }}
                 // Collection of dates that have to be marked. Default = {}
                 markedDates={marked}
@@ -380,6 +404,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                     setSelectedDate(new Date(day.dateString).toISOString().slice(0,10));
                     console.log(day.dateString)
                     setDateString(day.dateString);
+                    setShowDesc(true)
                   }}
 
                   onMonthChange={month => {
@@ -437,13 +462,16 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
             {/*<TouchableOpacity style={[styles.addBtn,styles.elevation]} >
                 <Icon name="add" size={18} color='white' type='ionicon' ></Icon>
                 </TouchableOpacity>*/}
-            </View>
+            </Animated.View>
             
             </View>
-            
+      { /* <Image source={require('../../assets/glb.jpg')} style={styles.imageRev} />*/}
     
-            <View style={[styles.elevation,{
-                backgroundColor:'#fff',
+            {showDesc?<Animated.View 
+            entering={FadeInDown.duration(400)}  
+            exiting={FadeOut}  
+            style={[styles.elevation,{
+                backgroundColor:'#00adef',
                 padding:8,
                 marginTop:80,
                 flex:1,
@@ -452,35 +480,38 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                 borderTopLeftRadius:  12,
                 borderBottomRightRadius:  12,
                 borderBottomLeftRadius:  12,
-                margin:4
+                margin:4,
+
                 }]}>
                     <View style={{
-                        backgroundColor:'#0000b0',
+                        backgroundColor:'#fff',
                         position:'absolute',
                         top:14,
                         right:'47%',
                         height:7,
                         width:'10%',
                         borderRadius:8,
-                        opacity:0.2
+                        opacity:0.4
                         }}>
                         
                     </View>
                         
-                   {/* <TouchableOpacity  style={{
-                        backgroundColor:'#00adef',
-                        width:35,
-                        height:35,
+                    <TouchableOpacity onPress={() => setShowDesc(false)}
+                      style={{
+                        width:40,
+                        height:40,
                         padding:4, 
                         borderRadius:4, 
                         alignItems: "center",
                         justifyContent:'center',
                         position:"absolute",
-                        top:14,
-                        right:24,
+                        top:4,
+                        right:6,
+                        borderRadius:50,
+                        opacity:0.6
                     }} >
-                        <Icon name="plus" size={14} color='#fff' type='antdesign' ></Icon>
-                </TouchableOpacity>*/}
+                        <Icon name="closecircleo" size={22} color='#fff' type='antdesign' ></Icon>
+                </TouchableOpacity>
 
                 
             <View style={{padding:20,flex:1}}>
@@ -493,7 +524,7 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                             flexDirection:'row',
                             marginTop:12,
                             marginLeft:8 ,
-                            backgroundColor:'#ececec',
+                            backgroundColor:'#fff',
                             padding:6,
                             borderRadius:6,
     
@@ -504,11 +535,12 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                         <Text style={{color:'#1c1c1c',fontSize:20,fontWeight:'600',marginTop:10}}>
                         {user.LAN== 'F' ?'Description'  :'Description'}
                         </Text>
+                       
                         <View style={{
                             flexDirection:'row',
                             marginTop:12,
                             marginLeft:8 ,
-                            backgroundColor:'#ececec',
+                            backgroundColor:'#fff',
                             padding:6,
                             borderRadius:6,
                             height:30
@@ -517,26 +549,48 @@ const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(
                         </View>
                         
                             {delAbs?
-                            <View style={{position:'relative',marginTop:10,alignItems:'flex-end'}}>
-                            <TouchableOpacity  style={{
-                            backgroundColor:'orange',
-                            height:35,
-                            width:'40%',
-                            padding:6, 
-                            borderRadius:4, 
-                            alignItems: "center",
-                            justifyContent:'center',
-    
-                        }} >
-                            <Text style={{color:'#fff',fontSize:14,fontWeight:'600'}}>{user.LAN== 'F' ?"Supprimer Abs":"Delete Abs"}</Text>
-                    </TouchableOpacity></View>:<View></View>}
+                            <View style={{
+                                position:'relative',
+                                marginTop:20,
+                                //backgroundColor:'red',
+                                }}>
+
+   
+                    <TouchableOpacity  style={{
+                                backgroundColor:'#FAF884',
+                                height:40,
+                                width:40,
+                                padding:6, 
+                                borderRadius:8, 
+                                alignItems: "center",
+                                justifyContent:'center',
+                                alignSelf:'flex-end'
+                            }} >
+                            <Icon name="minus" size={16} color='#1c1c1c' type='antdesign' ></Icon>
+                            
+                    </TouchableOpacity>
+                 
+                    </View>:<View></View>}
                         
                         
                 </ScrollView>
             </View>
 
                 
+            </Animated.View >:
+
+                <View style={{
+                    alignItems:'center',
+                    justifyContent:'center',
+                    flex:1,
+                    padding:20,
+
+                    }}>
+                <Text style={{fontSize:16}}> {user.LAN == 'F'?'Rien à afficher . ':'Nothing to display .'}</Text>
             </View>
+   
+           
+            }
              
 
         </View>
@@ -578,9 +632,9 @@ const styles = StyleSheet.create({
         top:16
     }   ,  
     elevation: {
-        elevation: 2,
-        shadowColor: '#999999',
-        shadowOpacity:0.8,
+        elevation: 6,
+        shadowColor: 'gray',
+        shadowOpacity:0.2,
         shadowOffset: { width: 0, height: 0 },
     },
 
@@ -588,5 +642,17 @@ const styles = StyleSheet.create({
   pickedDateContainer: {
     padding: 20,
     backgroundColor: '#eee',
-    borderRadius: 10,}
+    borderRadius: 10,
+},
+
+    imageRev: {
+        width: '100%',
+        height:220,
+
+
+        position:'absolute',
+backgroundColor:'white',
+    bottom:0,
+    opacity:0.1,
+      }, 
 })

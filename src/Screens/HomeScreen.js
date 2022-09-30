@@ -1,4 +1,4 @@
-import { StyleSheet, Animated, ActivityIndicator,TextInput, Text, View, FlatList, TouchableOpacity , Image, SafeAreaView} from 'react-native';
+import { StyleSheet, ActivityIndicator,TextInput, Text, View, FlatList, TouchableOpacity , Image, SafeAreaView} from 'react-native';
 import { Icon } from '@rneui/themed';
 import CalendarPicker from 'react-native-calendar-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -14,7 +14,7 @@ import { Avatar } from "@rneui/themed";
 import { ScrollView } from 'react-native-gesture-handler';
 import {StackActions} from '@react-navigation/native';
 import { Pressable } from 'react-native';
-
+import  Animated, { FadeIn, FlipOutYLeft }  from 'react-native-reanimated'; 
 export default function HomeScreen({navigation}) {
 
     const dispatch = useDispatch()
@@ -264,7 +264,7 @@ export default function HomeScreen({navigation}) {
                 //borderBottomLeftRadius:  30,
                 paddingBottom:12
                 }}>
-                    <View style={{flexDirection:'row' ,alignItems:'center',marginLeft:'5%' ,marginTop:'10%'}}>
+                    <View style={{flexDirection:'row' ,alignItems:'center',marginLeft:'5%' ,marginTop:'20%'}}>
                     <Text style={{fontSize:22,fontWeight:'300',color:'#1c1c1c'}} >
                         {user.LAN == 'F'?'Bonjour,  ':'Hello,  '}
                         </Text>
@@ -272,9 +272,12 @@ export default function HomeScreen({navigation}) {
                         {user.SCIV_PRE}
                     </Text>
                     </View>
+                    <View style={{padding:4,marginBottom:10}}>
                     <Text style={{fontSize:14,fontWeight:'400',color:'#1c1c1c',opacity:0.4,marginLeft:'5%',marginTop:10}}>
                     {user.LAN == 'F'?'Bonne Journée .':'Have a nice day .'}
                     </Text>
+                    </View>
+                    
 
                   <View></View>
                    
@@ -294,11 +297,11 @@ export default function HomeScreen({navigation}) {
                         <Icon name="logout" size={20} color={'#fff'} type='antdesign'></Icon>
                        
                     </TouchableOpacity>
-            {/*     <TouchableOpacity onPress={() => navigation.openDrawer()}
+           <TouchableOpacity //onPress={() => navigation.openDrawer()}
                    style={{
-                        backgroundColor:'#fafafa',
-                        height:30,
-                        width:30,           
+                        backgroundColor:'#f5f5f5',
+                        height:40,
+                        width:40,           
                         alignItems:'center',
                         justifyContent:'center',
                         position:'absolute',
@@ -306,7 +309,7 @@ export default function HomeScreen({navigation}) {
                         top:20
                         }}>
                         <Icon name="md-menu-outline" size={20} color={'#000'} type='ionicon'></Icon>
-                      </TouchableOpacity>*/}
+                      </TouchableOpacity>
 
 
             </View>
@@ -316,8 +319,8 @@ export default function HomeScreen({navigation}) {
         //numColumns={2}
         renderItem={({item}) =>  
 
-        <View
-
+        <Animated.View
+                      entering={FadeIn} 
       key={item.ZMOD_ID} style={[styles.elevation,{
             position:'relative',
             marginTop:16,
@@ -387,7 +390,7 @@ export default function HomeScreen({navigation}) {
 
             <Icon name="chevron-right" size={24} color={'#1c1c1c'} type='entypo'></Icon>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
     } 
   />
 

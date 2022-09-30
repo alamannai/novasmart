@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
   const initialState = {
     uri: '',
-    lang: 'E',
+    lang:'E',
     isSuccess: false,
     isLoading: false,
     message: '',
@@ -24,9 +24,9 @@ export const appSlice = createSlice({
             state.uri = uri;
         },
         modLan : (state,{payload}) => {
-            const lan =  payload.lan;
-            localStorage.setItem("lan", lan);
-            state.lang = lan;
+            const l =  payload.lan;
+            localStorage.setItem("lan", l);
+            state.lang = l;
         },
         reset: (state) => initialState,
     },
